@@ -53,6 +53,8 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 | Re-learning the same internal site | Saved capability; ask once next time |
 | Huge default install | Multicall core + explicit layers; **fast**, understandable system |
 | Agent as magic chat with your rights | Unit + user + ACLs; log and stop; CRIU + btrfs when useful |
+| Agent-only UI (wait for “thinking”) | Instant normal tools always; agent for multi-step goals |
+| Full default DE chrome / ricing | Strip admin/ricing subsystems agents + config can replace |
 | “Boots in QEMU” as the story | Real hardware profiles; measure the base |
 | Hit-or-miss agent restore | Kernel-deep CRIU + stable linker/loader/libc for agent trees |
 | Pretty distro as the story | Getting real work done |
@@ -84,6 +86,8 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 13. Durable agent state on disk (btrfs); **first-class, kernel-deep CRIU** with tested restores  
 14. Hardware-aware base; QEMU is not the product  
 15. Explicit formats + linker/loader + system libc + debug identity (not Cosmo-as-system-libc)  
+16. Dual path: instant normal tools + agent goals; teach → sandboxed capability  
+17. Lean default chrome; progressive app replacement—not a ricing DE  
 
 → [principles/PRINCIPLES.md](./principles/PRINCIPLES.md)
 

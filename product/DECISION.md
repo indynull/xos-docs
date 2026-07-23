@@ -6,7 +6,7 @@ Parent: [../VISION.md](../VISION.md)
 
 Agree on **one product**:
 
-> A goal-first desktop (Archy/Enso-informed)—not merely a Sway/DE fork—with reusable capabilities, supervised OS agents (per-agent user + unit + ACLs + durable data; kernel-deep first-class CRIU + btrfs), and a Wayland modal shell (CLI + plain language), on a radical small, hardware-profiled base that **stays near existing system libc** for v1, with explicit format/linker/loader/debug policy. Alternate libc is future work. Show it works on real tasks before calling it an OS.
+> A goal-first desktop (Archy/Enso-informed)—not merely a Sway/DE fork—with **dual path** (instant normal tools + agent goals), reusable sandboxed capabilities (including teach-from-normal-use), supervised OS agents (user + unit + ACLs + durable data; kernel-deep first-class CRIU + btrfs), and a Wayland modal shell, on a radical small, hardware-profiled base that **stays near existing system libc** for v1 and still optimizes the base where safe. Alternate libc is future work. Progressive app replacement; lean default chrome. Show it works on real tasks before calling it an OS.
 
 ## Options
 

@@ -12,7 +12,9 @@ goal → do we have a capability?
          no  → build one with the user → check permissions → save → reuse later
 ```
 
-**Good ones are:** predictable, limited in power, inspectable, versioned, turn-off-able, explained in plain words.
+**Teach path (preferred when freeform agents are slow or creative):** the human does the job the **normal/instant** way until the pattern is clear, then that pattern is **persisted** as a capability under sandbox limits—so the next goal hits a fixed path, not an improvising model.
+
+**Good ones are:** predictable, limited in power, inspectable, versioned, turn-off-able, explained in plain words, sandboxed so they do not “get creative.”
 
 ## What we care about
 
@@ -35,8 +37,10 @@ User-built capabilities should **declare** permissions and runtime needs so rest
 | Kind of work | Preferred path |
 |--------------|----------------|
 | Multi-step job | Mode + shared project context + several capabilities |
-| Same painful tool every week | Wire once, then call by goal |
+| Same painful tool every week | Wire once (or teach path), then call by goal |
+| Need it *now* (no model lag) | Instant normal tools (terminal, launcher, editor)—always available |
 | Open-ended browsing | Normal browser is fine |
+| Enterprise auth / mail / flaky SaaS | Capability with explicit auth story—not freeform agent hope |
 
 **Check:** less hunting? something saved for next time? right mode? would this still make sense on a hard multi-day job?
 

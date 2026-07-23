@@ -6,7 +6,8 @@ Things we are **not** trying to be. Saying no keeps the project clear.
 
 | Not this | Why |
 |----------|-----|
-| Theme / wallpaper product | Decorations are not the point (generated backgrounds may exist as a side path) |
+| Theme / wallpaper / ricing *product* | No desktop-ricing subsystem; light/dark prefer implicit or simple system behavior, not a theme app |
+| Agent-only UI with no instant tools | Model latency is real; always keep normal/fast paths (terminal, launcher, editor) |
 | App store as the main product | Different product; maybe later on top |
 | Chat box on a normal desktop as the end state | Leaves the old workflow intact |
 | Toy demos as the identity | Real work is the bar |

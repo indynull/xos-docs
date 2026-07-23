@@ -34,6 +34,12 @@ OK if the mode is shown, easy to undo, and you can lock a choice.
 
 Editor, terminal, files, and browser engine share one session/context. They should feel like parts of the same desk, not five separate products. Full browser is an escape hatch, not the usual first step.
 
-## Shell
+## Shell and dual path
 
-In every mode: normal CLI remains. Plain-language goals use the same supervised agent stack ([AGENTS.md](./AGENTS.md)).
+In every mode:
+
+- **Instant path:** normal CLI, terminal, launcher-class actions—no waiting on a model.  
+- **Goal path:** plain-language goals use the supervised agent stack ([AGENTS.md](./AGENTS.md)).  
+- **Both stay.** Agent lag must not own the only way to open a terminal or flip a known toggle.
+
+See dual path and progressive app replacement: [../product/OS_VS_DE.md](../product/OS_VS_DE.md).

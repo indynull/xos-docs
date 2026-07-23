@@ -24,6 +24,8 @@ If we break one of these, write down why.
 | 16 | Hardware-aware base | Real profiles and measurement; QEMU is CI, not the product. |
 | 17 | First-class CRIU | Kernel-deep; on-image; supervisor path; tested dump→restore—not hit-or-miss. |
 | 18 | Runtime ABI | Formats, linkers, loaders, system libc, debug symbols—designed for CRIU; no novel libc on the v1 critical path. |
-| 19 | OS not only DE | Goal-first surface + agents + base; not a tiling-WM fork as the project. |
+| 19 | OS not only DE | Goal-first surface + agents + lean base; not a tiling-WM fork as the project. |
+| 20 | Dual path | Instant normal tools always available; agent path for multi-step goals; teach → sandboxed capability. |
+| 21 | Progressive replace | Start lean; replace apps over time; do not ship a bloated default “mini desktop suite.” |
 
 More: [../concepts/](../concepts/) · [../product/SECURITY.md](../product/SECURITY.md) · [../product/V1_SCOPE.md](../product/V1_SCOPE.md) · [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md)

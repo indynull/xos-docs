@@ -15,6 +15,8 @@ Someone who does real work tries the image for an afternoon (on real hardware wh
 - [ ] Boots and runs real tasks on a **documented real-hardware profile** (QEMU OK only as CI smoke)  
 - [ ] Wayland modal shell; mode always visible  
 - [ ] Plain-language goal path and normal CLI both work  
+- [ ] Instant path usable without waiting on a model (e.g. open terminal / known hot path)  
+- [ ] At least one teach → sandboxed capability reuse (or explicit create-and-reuse)  
 - [ ] Real tasks as in [V1_SCOPE.md](./V1_SCOPE.md)  
 - [ ] Supervisor: status, stop, and action log for non-trivial steps  
 - [ ] **CRIU first-class on our kernel:** dump → restore → agent continues a known task (primary profile); fail-soft only after real attempt  

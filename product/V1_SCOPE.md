@@ -12,7 +12,7 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 
 | Area | Need |
 |------|------|
-| Shell | CLI + plain-language goal entry; quiet UI; always show mode; at least Develop and Research |
+| Shell | CLI + plain-language goal entry; **instant** normal tools without model wait; quiet UI; always show mode; at least Develop and Research |
 | Desktop | Wayland; modal focus (mode + agent); multi-window allowed, not default |
 | Context | Shared project/workspace across views |
 | Agent supervisor | Units + policy: start/stop; action log; at least two agent identities |
@@ -20,7 +20,7 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Agents | Goal entry; read and act under ACLs; status, stop, log; durable data paths; dump-friendly **link/load layout** required for the happy path |
 | Isolation | Per-agent Unix user + unit sandbox + ACLs; no default “run as me” |
 | Durability | btrfs (or honest fallback) for agent/workspace paths; snapshots as default backup story when available |
-| Capabilities | Small real set (below); one create-and-reuse path; CRIU as platform capability |
+| Capabilities | Small real set (below); one create-and-reuse path (teach path OK); sandboxed; CRIU as platform capability |
 | Develop | Real edit + terminal + agent session |
 | Security | Written rules match behavior ([SECURITY.md](./SECURITY.md)) |
 | Base | Multicall-leaning core; at least one **hardware profile** ([HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md)); not QEMU-as-product |
