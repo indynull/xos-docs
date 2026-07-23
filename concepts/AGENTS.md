@@ -11,11 +11,14 @@ Agents are part of the OS. They turn goals into capability calls, and help creat
 A **supervisor** (supervisord-style) owns agent processes:
 
 - start / stop / restart / idle cleanup  
+- **checkpoint / restore** via [CRIU](./CHECKPOINTING.md) when the process tree allows (freeze instead of only kill)  
 - which agents may talk to which (controlled channels)  
-- policy hooks (confirm, log, kill)  
+- policy hooks (confirm, log, kill, dump)  
 - mapping each agent to a **Unix user + ACLs**
 
 The human talks to the system (modal shell / goal entry). The supervisor talks to agents. Agents do not become a free-for-all mesh.
+
+**Lifecycle upgrade path:** `stop` is not only SIGTERM. Preferred soft path: CRIU dump of the agent tree (images under that agent’s ACL store) → optional leave frozen or exit → later restore and continue. If dump fails, fall back to kill + resume from capability/action log. Design agent trees to be dump-friendly (ordinary files, pipes, sockets; avoid mystery devices).
 
 ## Identity
 
@@ -38,7 +41,7 @@ v1 should demonstrate at least two concurrent agents under the supervisor with *
 
 ## Must show
 
-What is happening · which agent identity · history of actions · stop · undo when possible · ask before high-risk steps.
+What is happening · which agent identity · history of actions · stop · checkpoint/restore status when used · undo when possible · ask before high-risk steps.
 
 ## Modes
 

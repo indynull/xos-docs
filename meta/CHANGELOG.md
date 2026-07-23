@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-23 (Rohit pass — CRIU checkpointing)
+
+- **CRIU** (Checkpoint/Restore In Userspace; often “ciru”): supervisor-owned freeze/restore of agent trees; session snapshots; warm start; hung-agent dump.
+- New [concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md); wired into technical shape, agents, security, v1, brief, vision, decision, governance, alternative tracks, README.
+- v1: optional dump/restore of one simple agent tree; not full DE C/R or live migration as the demo.
+
 ## 2026-07-23 (Rohit pass — multicall / Cosmopolitan base)
 
 - **Base architecture:** think larger than “trimmed distro”—Linux + BusyBox-class multicall core, optional Cosmopolitan/APE portable tools for capabilities/bootstrap, heavier tools as layers.

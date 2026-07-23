@@ -6,7 +6,7 @@ Design notes for a Linux desktop that starts from **what you want to do**, not f
 goal  →  capability  →  result   (in a work mode)
 ```
 
-**Spine (product shape):** Wayland + modal shell (CLI + plain language) · supervised agents with per-agent users/ACLs · radical small base (BusyBox-class multicall + optional Cosmopolitan/APE tools + optimizations). QEMU is CI smoke, not the story.
+**Spine (product shape):** Wayland + modal shell (CLI + plain language) · supervised agents with per-agent users/ACLs · CRIU checkpoint/restore of agent trees · radical small base (BusyBox-class multicall + optional Cosmopolitan/APE tools + optimizations). QEMU is CI smoke, not the story.
 
 ---
 
@@ -25,7 +25,7 @@ If a detail file disagrees with the brief or one-pager, fix the detail file.
 | Area | Files |
 |------|--------|
 | Rules | [principles/PRINCIPLES.md](./principles/PRINCIPLES.md) · [principles/NON_GOALS.md](./principles/NON_GOALS.md) |
-| Ideas | [concepts/WORK_MODES.md](./concepts/WORK_MODES.md) · [concepts/CAPABILITIES.md](./concepts/CAPABILITIES.md) · [concepts/AGENTS.md](./concepts/AGENTS.md) |
+| Ideas | [concepts/WORK_MODES.md](./concepts/WORK_MODES.md) · [concepts/CAPABILITIES.md](./concepts/CAPABILITIES.md) · [concepts/AGENTS.md](./concepts/AGENTS.md) · [concepts/CHECKPOINTING.md](./concepts/CHECKPOINTING.md) |
 | Product | [product/DECISION.md](./product/DECISION.md) · [product/V1_SCOPE.md](./product/V1_SCOPE.md) · [product/SUCCESS_CRITERIA.md](./product/SUCCESS_CRITERIA.md) · [product/TECHNICAL_SHAPE.md](./product/TECHNICAL_SHAPE.md) · [product/SECURITY.md](./product/SECURITY.md) · [product/GOVERNANCE.md](./product/GOVERNANCE.md) |
 | Background | [context/PROBLEM.md](./context/PROBLEM.md) · [context/ALTERNATIVE_TRACKS.md](./context/ALTERNATIVE_TRACKS.md) |
 | Process | [meta/HOW_TO_ITERATE.md](./meta/HOW_TO_ITERATE.md) · [meta/CHANGELOG.md](./meta/CHANGELOG.md) |

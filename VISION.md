@@ -22,6 +22,7 @@ goal  →  skill (capability)  →  result
 | **Shell** | Normal CLI plus plain-language goals into the agent stack; not a separate product bolted on later |
 | **Agent** | Built into the OS: look things up, take actions, and help create new capabilities when missing. Not one privileged chat process |
 | **Agent supervisor** | Supervisord-style control: start/stop agents, wire how they talk, enforce policy. Not ad-hoc background jobs |
+| **Checkpointing** | [CRIU](https://criu.org/) freeze/restore of agent process trees (session save, warm start)—supervisor-owned, not chat-log pretend |
 | **Agent identity** | Each agent has its own Unix user and ACLs. Rights are granted, not inherited wholesale from the human |
 | **Desktop surface** | Wayland + modal UI: work mode and agent interaction at the center; many windows possible, not the default |
 | **Base system** | Linux + **small multicall core** (BusyBox-class), optional Cosmopolitan/APE portable tools, real toolchain/kernel optimizations. Not “Ubuntu minus packages.” Heavier tools are layers, not default bulk |
@@ -50,7 +51,7 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 | Many windows and tabs | One clear mode; shared project context; windows optional |
 | Re-learning the same internal site | Saved capability; ask once next time |
 | Huge default install | Multicall core + explicit layers; **fast**, understandable system |
-| Agent as magic chat with your rights | Supervisor + per-agent users/ACLs; log and stop |
+| Agent as magic chat with your rights | Supervisor + per-agent users/ACLs; log and stop; CRIU freeze when useful |
 | “Boots in QEMU” as the story | Real work on real hardware; measure the base |
 | Pretty distro as the story | Getting real work done |
 

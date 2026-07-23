@@ -13,6 +13,7 @@ Guesses only. Swap parts if the idea still holds. The spine below is intentional
 | Portable tools | Cosmopolitan Libc / APE-style **actually portable** binaries where they help (agent helpers, bootstrap tools, cross-host skills)—not required for every process |
 | Limits | Process isolation; network/file limits; **per-agent Unix user + ACLs** |
 | Agent supervisor | Supervisord-style: lifecycle, restart policy, inter-agent channels, policy hooks (can itself be a small dedicated binary) |
+| Checkpoint / restore | **[CRIU](https://criu.org/)** on the host: freeze/restore agent process trees under supervisor control ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
 | Capability store | Versioned tools; local first |
 | Agents | One or more workers under the supervisor; each identity-scoped; reuse existing stacks if they fit |
 | Shell | CLI + plain-language goal entry; modes; action log; editor/terminal surfaces |
@@ -28,6 +29,7 @@ The default mental model is **not** “fork a consumer distro and install an age
 Linux kernel
   → small multicall core (BusyBox-class applets: mount, sh, networking basics, …)
   → supervisor + agent runtime (isolated users/ACLs)
+  → CRIU (host tool): dump/restore agent trees
   → shell (CLI + plain language) + Wayland modal surface
   → capabilities / optional fuller tools pulled in as needed
 ```
@@ -83,6 +85,22 @@ Think **supervisord / init for agents**, not “spawn a chat process and hope.�
 
 Which library implements the agent loop is an engineering choice. **Supervisor + identity + ACLs are product shape.**
 
+## Checkpointing (CRIU)
+
+**CRIU** (Checkpoint/Restore In Userspace; often misspelled “ciru”) freezes a Linux process tree to image files and restores it later. It is the right primitive for agent lifecycle beyond kill/restart.
+
+| Use | How it attaches |
+|-----|-----------------|
+| Freeze / resume agent | Supervisor calls dump/restore on that agent’s tree |
+| Session snapshot | Named images + workspace path; revert or branch a run |
+| Warm start | Dump after runtime is loaded; next “start agent” restores warm |
+| Hung agent | Dump for offline debug; restart a clean worker |
+| Later | Incremental dumps, migrate to another box, GPU agents |
+
+**Not v1 product goals:** full Wayland DE checkpoint, cross-kernel live migration as a feature pitch. **Yes as direction:** dump-friendly agent trees, supervisor-owned CRIU, ACL-scoped image store. Details: [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md).
+
+CRIU is a **host** package (GPLv2), not a Cosmopolitan APE blob. Images are sensitive (memory/secrets)—same care as swap.
+
 ## Base system rules
 
 - Prefer multicall core + explicit layers over a full consumer userspace.  
@@ -100,6 +118,7 @@ Which library implements the agent loop is an engineering choice. **Supervisor +
 | Kernel | Linux | Own defconfig; optimize what we ship |
 | Core applets | BusyBox, toybox, custom multicall | Mount, net, basic utils |
 | Init / agent control | Dedicated supervisor binary | May double as pid 1 helper or run under a tiny init |
+| Checkpoint | CRIU (+ go-criu if supervisor is Go) | Agent trees first; not whole DE in v1 |
 | Shell | Real shell + plain-language front | Same agent stack |
 | Desktop | Wayland compositor + modal shell UI | Windows optional |
 | Portable helpers | Cosmopolitan/APE builds | Capabilities, bootstrap, recovery |

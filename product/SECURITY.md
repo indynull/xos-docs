@@ -14,10 +14,11 @@ Tools that are too broad · bad content tricking the agent · silent money/delet
 
 | Piece | Rule |
 |-------|------|
-| Supervisor | Starts/stops agents; defines allowed IPC; enforces policy hooks |
+| Supervisor | Starts/stops agents; defines allowed IPC; enforces policy hooks; owns CRIU dump/restore |
 | Agent user | Distinct from the human login; no default root; no silent “become me” |
 | ACLs | Files, sockets, and tools granted per agent and per capability |
-| Human | Approves high-risk steps; can stop any agent; sees the log |
+| Checkpoint images | Same sensitivity as process memory / swap; per-agent paths; not world-readable; export off-box is high-risk |
+| Human | Approves high-risk steps; can stop or dump any agent; sees the log |
 | Capabilities | State network, files, secrets, side effects; off until opened |
 
 Agents do not inherit the full rights of the logged-in user by default. Grants are explicit and reviewable.
@@ -32,7 +33,9 @@ Agents do not inherit the full rights of the logged-in user by default. Grants a
 6. Agent is not root by default; agent uid ≠ human uid by default.  
 7. New capabilities are not fully trusted until reviewed.  
 8. Inter-agent channels are deny-by-default; supervisor opens what is needed.  
-9. No “run as user” escape without an explicit, logged grant.
+9. No “run as user” escape without an explicit, logged grant.  
+10. CRIU dumps are supervised and logged; restoring an image re-enters that agent identity’s ACL, not the human’s by default.  
+11. Copying checkpoint images off the machine needs the same class of confirm as secret export.
 
 ## Permission sketch
 
@@ -45,5 +48,7 @@ Agents do not inherit the full rights of the logged-in user by default. Grants a
 | Change the OS | Confirm; often blocked in v1 |
 | Agent → agent call | Deny until supervisor + policy allow |
 | Agent uses human credentials | Confirm; prefer short-lived / scoped secrets |
+| CRIU dump / restore | Supervisor only; log; images ACL-scoped |
+| Export checkpoint images | Confirm; treat as secret-bearing |
 
 Update this file if defaults get wider.

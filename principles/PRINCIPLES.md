@@ -16,7 +16,7 @@ If we break one of these, write down why.
 | 8 | Honest v1 | Success is showing the idea on real work—not a full distro program or a QEMU demo. |
 | 9 | Visible agent | Show status, allow stop, keep a trail; name the agent identity. |
 | 10 | Clear mode | Always show which work mode is active. |
-| 11 | Supervised agents | Lifecycle and inter-agent channels go through a supervisor. |
+| 11 | Supervised agents | Lifecycle and inter-agent channels go through a supervisor; soft stop can CRIU-checkpoint, not only kill. |
 | 12 | Isolated agents | Each agent has its own user and ACLs; not the human’s full rights by default. |
 | 13 | Native shell | CLI and plain-language goals share one stack; shell is not an afterthought. |
 | 14 | Modal desktop | Wayland + mode-centered UI; many windows possible, not the default. |

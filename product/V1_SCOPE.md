@@ -15,8 +15,8 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Shell | CLI + plain-language goal entry; quiet UI; always show mode; at least Develop and Research |
 | Desktop | Wayland; modal focus (mode + agent); multi-window allowed, not default |
 | Context | Shared project/workspace across views |
-| Agent supervisor | Lifecycle control; start/stop; action log; at least two agent identities |
-| Agents | Goal entry; read and act under ACLs; status, stop, log |
+| Agent supervisor | Lifecycle control; start/stop; action log; at least two agent identities; **optional** CRIU dump/restore of one simple agent tree ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Agents | Goal entry; read and act under ACLs; status, stop, log; dump-friendly process layout preferred |
 | Isolation | Per-agent Unix user + ACLs; no default “run as me” |
 | Capabilities | Small real set (below); one create-and-reuse path |
 | Develop | Real edit + terminal + agent session |
@@ -35,7 +35,7 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 
 ## Out of v1
 
-Full industry workflows · multi-arch program · app store · theming as a feature · every website · new kernel from scratch · mobile/edge as main *product* · QEMU as product proof · single privileged agent with human rights · window-manager-first UX · Cosmopolitan as the whole desktop · busybox-only image with no goal/agent path.
+Full industry workflows · multi-arch program · app store · theming as a feature · every website · new kernel from scratch · mobile/edge as main *product* · QEMU as product proof · single privileged agent with human rights · window-manager-first UX · Cosmopolitan as the whole desktop · busybox-only image with no goal/agent path · full Wayland DE checkpoint · cross-machine live migration as the v1 demo · GPU CRIU as required.
 
 ## Time
 

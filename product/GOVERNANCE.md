@@ -17,8 +17,8 @@ A small group owns: what is in/out of the idea, v1 cuts, core vs other project. 
 | Product | Brief, one-pager, modes, capabilities UX, non-goals, v1 bar |
 | Base system | Multicall core, images, layers, Cosmopolitan/APE helpers where useful, toolchain/kernel knobs that earn keep |
 | Shell / desktop | Wayland modal UI, CLI + plain-language goal entry |
-| Agent runtime | Supervisor, lifecycle, inter-agent channels, tool loop |
-| Security | Policy, per-agent users/ACLs, capability classes |
+| Agent runtime | Supervisor, lifecycle, CRIU dump/restore hooks, inter-agent channels, tool loop |
+| Security | Policy, per-agent users/ACLs, capability classes, checkpoint-image sensitivity |
 | Infra | Build, CI smoke (QEMU OK), real-hardware artifacts when available |
 
 If product has no owner, pause idea-changing work.

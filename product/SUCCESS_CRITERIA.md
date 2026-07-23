@@ -17,6 +17,7 @@ Someone who does real work tries the image for an afternoon (on real hardware wh
 - [ ] Plain-language goal path and normal CLI both work  
 - [ ] Real tasks as in [V1_SCOPE.md](./V1_SCOPE.md)  
 - [ ] Supervisor: status, stop, and action log for non-trivial steps  
+- [ ] (Stretch) CRIU dump/restore of one simple agent tree on real hardware, or honest fail-soft logged  
 - [ ] At least two agent identities with distinct users/ACLs  
 - [ ] Create (or register) a capability and use it again  
 - [ ] Real Develop session  

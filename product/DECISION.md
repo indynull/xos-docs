@@ -6,7 +6,7 @@ Parent: [../VISION.md](../VISION.md)
 
 Agree on **one product**:
 
-> A goal-first desktop with reusable capabilities, supervised OS agents (per-agent users/ACLs), and a Wayland modal shell (CLI + plain language), on a radical small base (Linux + multicall core, optional Cosmopolitan/APE tools, real optimizations). Show it works on real tasks before calling it an OS.
+> A goal-first desktop with reusable capabilities, supervised OS agents (per-agent users/ACLs, CRIU freeze/restore when useful), and a Wayland modal shell (CLI + plain language), on a radical small base (Linux + multicall core, optional Cosmopolitan/APE tools, real optimizations). Show it works on real tasks before calling it an OS.
 
 ## Options
 

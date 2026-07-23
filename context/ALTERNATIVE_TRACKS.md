@@ -8,6 +8,7 @@ Related ideas that are **not automatically this project**. Keep them separate so
 |-------|----------|----------|
 | Multicall core + toolchain opts | BusyBox/toybox/custom multicall, real perf work | **In** base strategy for xOS |
 | Cosmopolitan / APE tools | Actually portable helpers and capability blobs | **In** as tool/bootstrap layer; not the desktop product |
+| CRIU checkpoint/restore | Freeze/restore process trees (often typed “ciru”) | **In** as supervisor lifecycle + session snapshots; not DE-wide migrate as v1 product |
 | **xOS (this repo)** | Goal-first desktop + capabilities + supervised agents | Main idea here |
 | App-in-a-box “OS” | Avoid drivers; userspace environment | Can sit beside |
 | App store / platform | Plugins and stable APIs | Later, not v1 core |
