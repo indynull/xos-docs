@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-23 (dual path, teach→capability, lean chrome)
+
+- **Not a turn against OS-adjacent work:** DE surface is big; base still optimized (`OS_VS_DE.md`).
+- **Dual path:** instant normal tools always; agent for multi-step; model lag is first-class.
+- **Teach → sandboxed capability:** operator does it normally until pattern is clear, then persist.
+- Progressive app replacement; strip ricing/admin chrome by default.
+
 ## 2026-07-23 (stay near libc; OS vs DE; malloc caution)
 
 - **v1:** use existing system libc; alternate libc / Rust+shim is **future** (browser-on-new-libc is proposal-sized).
