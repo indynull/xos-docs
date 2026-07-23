@@ -13,7 +13,7 @@ If we break one of these, write down why.
 | 5 | Security matters | Agent is powerful: tight permissions, log, stop, ask before dangerous steps. |
 | 6 | Stay small | Ship a clear product, not every package. |
 | 7 | Radical small base | Prefer Linux + multicall core over a trimmed consumer distro. **Stay near system libc** unless departure is necessary. Optimize and measure. |
-| 8 | Honest v1 | Success is showing the idea on real work—not a full distro program or a QEMU demo. |
+| 8 | Honest v1 | Success is the harness on real tasks—not every layer rewritten; QEMU bring-up OK if the harness path is real. |
 | 9 | Visible agent | Show status, allow stop, keep a trail; name the agent identity. |
 | 10 | Clear mode | Always show which work mode is active. |
 | 11 | Supervised agents | Lifecycle via units + supervisor; soft stop can CRIU-checkpoint; data lives on disk. |
@@ -21,7 +21,9 @@ If we break one of these, write down why.
 | 13 | Native shell | CLI and plain-language goals share one stack; shell is not an afterthought. |
 | 14 | Modal desktop | Wayland + mode-centered UI; many windows possible, not the default. |
 | 15 | Durable agent state | btrfs (or equal) for memories/workspaces; snapshots under agent traffic. |
-| 16 | Hardware-aware base | Real profiles and measurement; QEMU is CI, not the product. |
+| 16 | Hardware-aware base | QEMU-first bring-up OK; real profiles for drivers/local LLM; measure. |
+| 22 | Wedge first | OS agent harness is the unique product; defer non-wedge layers. |
+| 23 | Dual model | Remote for hard goals; local when offline/cheap; OS-level budgets. |
 | 17 | First-class CRIU | Kernel-deep; on-image; supervisor path; tested dump→restore—not hit-or-miss. |
 | 18 | Runtime ABI | Formats, linkers, loaders, system libc, debug symbols—designed for CRIU; no novel libc on the v1 critical path. |
 | 19 | OS not only DE | Goal-first surface + agents + lean base; not a tiling-WM fork as the project. |

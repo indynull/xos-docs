@@ -25,7 +25,10 @@ Things we are **not** trying to be. Saying no keeps the project clear.
 | Endless UI customization | Defaults should be strong; modal focus over window soup |
 | Mobile or edge *product* as v1 | Different product; multicall base technique may still be shared |
 | Big committee process | Small group; ship |
-| QEMU-first as product narrative | CI smoke is fine; proof is real tasks / real hardware |
+| QEMU-only forever as the product story | QEMU-first *bring-up* is fine; still need real HW for drivers/local LLM/demos |
+| Hostile-web agent farm as v1 (puppeteer + residential IP) | Expensive, brittle, legal/ethical minefield; not the harness wedge |
+| Shelling out to a chat CLI as the OS agent | Need OS-level harness, routing, and budgets |
+| Replacing NetworkManager/iwd in v1 | Start with them; replace later if earned |
 | Single agent with the user’s full rights | Supervisor + per-agent users/ACLs |
 | Window-manager-first UX | Many windows allowed; not the default story |
 

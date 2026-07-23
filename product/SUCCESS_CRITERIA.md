@@ -4,15 +4,16 @@ Parent: [../VISION.md](../VISION.md) · See: [V1_SCOPE.md](./V1_SCOPE.md)
 
 ## Pass / fail
 
-Someone who does real work tries the image for an afternoon (on real hardware when possible) and can say:
+Someone who does real work tries the image for an afternoon and can say:
 
-> I barely needed a normal browser or app menu. The mode matched what I was doing. Agents felt supervised and limited, not like my whole account on autopilot. I can see this growing into how I work.
+> This is not just chat on Linux. Agents are part of the OS (identity, limits, log). I still have instant tools. Modes and capabilities stick. I cannot get this stack by installing a random agent CLI.
 
-**Fail:** pretty Linux + chat on a normal desktop · only gimmick demos · “it boots in QEMU” with no real-work path.
+**Fail:** pretty Linux + chat CLI · only gimmick demos · QEMU boot with no harness · no wedge beyond opencode-on-Ubuntu.
 
 ## Checklist
 
-- [ ] Boots and runs real tasks on a **documented real-hardware profile** (QEMU OK only as CI smoke)  
+- [ ] Boots and runs harness path on **QEMU and/or documented real-hardware profile**  
+- [ ] Wedge is obvious: OS harness, not shell-out chat alone ([WEDGE.md](./WEDGE.md))  
 - [ ] Wayland modal shell; mode always visible  
 - [ ] Plain-language goal path and normal CLI both work  
 - [ ] Instant path usable without waiting on a model (e.g. open terminal / known hot path)  

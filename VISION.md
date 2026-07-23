@@ -55,7 +55,8 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 | Agent as magic chat with your rights | Unit + user + ACLs; log and stop; CRIU + btrfs when useful |
 | Agent-only UI (wait for “thinking”) | Instant normal tools always; agent for multi-step goals |
 | Full default DE chrome / ricing | Strip admin/ricing subsystems agents + config can replace |
-| “Boots in QEMU” as the story | Real hardware profiles; measure the base |
+| QEMU-only forever / no harness | QEMU-first bring-up OK; real HW for GPU/local LLM; harness is the product |
+| Shell-out chat as the OS | Dual model stack + OS budgets + supervised agents |
 | Hit-or-miss agent restore | Kernel-deep CRIU + stable linker/loader/libc for agent trees |
 | Pretty distro as the story | Getting real work done |
 
@@ -63,7 +64,7 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 
 ## Not goals
 
-Wallpaper/theme culture as the product · app store as the core · “AI on a normal desktop” as the end state · toy demos as the identity · multi-arch distro project as v1 · agent with silent root power · shipping default junk “just in case” · QEMU-first as the product narrative · one shared agent process with the user’s full rights.
+Wallpaper/theme culture as the product · app store as the core · “AI on a normal desktop” as the end state · toy demos as the identity · multi-arch distro project as v1 · agent with silent root power · shipping default junk “just in case” · QEMU-only forever with no harness · one shared agent process with the user’s full rights · hostile-web scrape farm as v1.
 
 Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 
@@ -84,10 +85,12 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 11. Agents are supervised and isolated (own user + unit + ACLs + data paths)  
 12. Shell is native (CLI + plain language), not an afterthought  
 13. Durable agent state on disk (btrfs); **first-class, kernel-deep CRIU** with tested restores  
-14. Hardware-aware base; QEMU is not the product  
-15. Explicit formats + linker/loader + system libc + debug identity (not Cosmo-as-system-libc)  
-16. Dual path: instant normal tools + agent goals; teach → sandboxed capability  
-17. Lean default chrome; progressive app replacement—not a ricing DE  
+14. QEMU-first bring-up OK; real hardware for what virt guests cannot do  
+15. **Wedge is OS agent harness**—not boiling every layer ([product/WEDGE.md](./product/WEDGE.md))  
+16. Explicit formats + linker/loader + system libc + debug identity  
+17. Dual path: instant normal tools + agent goals; teach → sandboxed capability  
+18. Lean default chrome; progressive app replacement  
+19. Dual model stack + OS budgets where possible ([product/MODEL_STACK.md](./product/MODEL_STACK.md))  
 
 → [principles/PRINCIPLES.md](./principles/PRINCIPLES.md)
 
@@ -97,16 +100,17 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 
 Show the idea works on **real tasks**, not toys.
 
-Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal): Wayland modal shell, goal → supervised agent → capability → mode, for a few paths, including:
+Bootable image: **QEMU-first bring-up OK**; real hardware for CRIU/local-LLM claims. Wayland modal shell, goal → supervised agent → capability → mode, for a few paths, including:
 
 - real develop session (edit + terminal + agent; plain-language shell path works)  
 - real investigation or write-up with sources  
-- create one non-trivial capability and use it again  
+- create one non-trivial capability and use it again (teach path OK)  
+- instant normal path works without waiting on a model (e.g. terminal)  
 - at least two agents under the supervisor with distinct users/ACLs  
 - CRIU dump → restore of the canonical agent path on a real-hardware profile (our kernel)  
 - documented linker/loader/**system libc**/debug policy for that agent tree  
 
-**Fail if:** pretty ISO + chat on a normal desktop, only gimmick demos, “it boots in QEMU” with no real-work path, agent restore is untested roulette, or the demo is only “another compositor.”
+**Fail if:** pretty ISO + chat on a normal desktop, only gimmick demos, “it boots in QEMU” with no real-work path, agent restore is untested roulette, agent-only UI with no instant tools, or the demo is only “another compositor.”
 
 → [product/V1_SCOPE.md](./product/V1_SCOPE.md) · [product/SUCCESS_CRITERIA.md](./product/SUCCESS_CRITERIA.md)
 
@@ -114,6 +118,6 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 
 ## Team decision
 
-One product: goal-first desktop (Archy/Enso-informed)—not just a DE fork—with capabilities, supervised agents, **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, **near-stock system libc for v1**, formats/linkers/loaders/debug. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos, libc rewrites) stay separate or later.
+One product: goal-first surface **plus** lean optimized base (not just a DE fork, not agent-only lag): capabilities with teach→sandbox path, supervised agents, dual instant/agent UX, **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, **near-stock system libc for v1**. Prove it before calling it an OS.
 
 → [product/DECISION.md](./product/DECISION.md)

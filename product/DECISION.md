@@ -6,7 +6,7 @@ Parent: [../VISION.md](../VISION.md)
 
 Agree on **one product**:
 
-> A goal-first desktop (Archy/Enso-informed)—not merely a Sway/DE fork—with **dual path** (instant normal tools + agent goals), reusable sandboxed capabilities (including teach-from-normal-use), supervised OS agents (user + unit + ACLs + durable data; kernel-deep first-class CRIU + btrfs), and a Wayland modal shell, on a radical small, hardware-profiled base that **stays near existing system libc** for v1 and still optimizes the base where safe. Alternate libc is future work. Progressive app replacement; lean default chrome. Show it works on real tasks before calling it an OS.
+> An **OS-level agent harness** (the wedge—not shell-out chat on a stock DE): dual path, sandboxed capabilities (teach path), supervised agents (user + unit + ACLs; CRIU + btrfs), dual model routing with budgets, Wayland modal goal-first surface, lean base near system libc. QEMU-first bring-up OK; real HW for local LLM/drivers. Defer non-wedge layers (custom net stack, hostile-web farm, novel libc). Show the harness on real tasks before boiling the ocean.
 
 ## Options
 

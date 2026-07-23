@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-23 (wedge, dual model, QEMU-first bring-up)
+
+- **Wedge:** OS-level agent harness is the “can’t do without us” product ([product/WEDGE.md](../product/WEDGE.md)); defer boiling every layer.
+- **Dual model stack:** remote + local; OS budgets; virtio-gpu weak for local LLM ([product/MODEL_STACK.md](../product/MODEL_STACK.md)).
+- **QEMU-first** bring-up agreed; real HW still required for local LLM/drivers.
+- Web middle path (structured sources); hostile-web farm out of v1; NM/iwd now, replace later.
+- Addresses “biting off too much / no solid unique product” risk.
+
 ## 2026-07-23 (dual path, teach→capability, lean chrome)
 
 - **Not a turn against OS-adjacent work:** DE surface is big; base still optimized (`OS_VS_DE.md`).

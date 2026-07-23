@@ -4,11 +4,19 @@ Parent: [../VISION.md](../VISION.md) · See: [TECHNICAL_SHAPE.md](./TECHNICAL_SH
 
 ## Problem
 
-QEMU is a fine **CI smoke** target. It is a bad **product and performance** target.
+Team default for early work: **QEMU first** for bring-up and harness iteration—**and do not ignore real hardware**.
 
-Drivers, firmware, power, GPU, Wi‑Fi, storage, and scheduler behavior only show up on real machines. An agent-first OS that only “works in the guest” does not prove the idea. Install contents and kernel knobs should be **deliberate per machine class**, not one generic image that hopes for the best.
+| Target | Role |
+|--------|------|
+| **QEMU** | First path for CI and early agent harness; fast loop |
+| **Real hardware** | Drivers, performance, and especially **local LLM** (virtio-gpu is not enough for serious local inference) |
+| **Product fail** | Only a QEMU boot screenshot with no harness path |
+
+Drivers, firmware, power, GPU, Wi‑Fi, storage, and scheduler behavior only show up on real machines. Install contents and kernel knobs should be **deliberate per machine class**.
 
 Personalization matters (different users, different hardware), but the **product shape** stays one: goals, modes, supervised agents, capabilities. What changes is the **base profile**—kernel, drivers, firmware, and which layers land on disk.
+
+See also model stack vs hardware: [MODEL_STACK.md](./MODEL_STACK.md).
 
 ## Profile model
 
@@ -56,13 +64,14 @@ xOS may use different packaging (not necessarily Arch). The rule is the same: **
 
 ## What is out of scope as a product story
 
-- Shipping one QEMU image as the only proof  
+- Shipping one QEMU image as the **only** product story forever  
 - Claiming multi-arch + every laptop without profiles  
 - Kernel patch tourism without a named profile and a measured win  
-- Forcing every user onto one hardware personality
+- Forcing every user onto one hardware personality  
+- Serious local LLM as a v1 requirement on virtio-gpu or $180-class machines
 
 ## v1 expectation
 
-- At least **one real-machine profile** path documented (even if rough): what kernel/drivers/install set, how to build, how to smoke-test agents + CRIU/btrfs on that box.  
-- QEMU remains allowed for CI only.  
+- **QEMU-first** path works for harness bring-up and CI.  
+- At least **one real-machine profile** path documented (even if rough) for CRIU and anything that needs real devices/GPU.  
 - Expand profiles as hardware and people join—not a v1 multi-SKU program.

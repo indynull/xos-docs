@@ -4,9 +4,9 @@ Parent: [../VISION.md](../VISION.md) · See: [SUCCESS_CRITERIA.md](./SUCCESS_CRI
 
 ## Goal
 
-Show the idea works on a few **real** tasks. Not a full workplace product. Not toy-only demos. Not “boots in QEMU” as the story.
+Show the **OS agent harness** works on a few **real** tasks. Not a full workplace product. Not toy-only demos. Not “every subsystem rewritten.”
 
-**Deliverable:** bootable image (prefer real hardware for demos; QEMU OK for CI) where the normal path is goal → **supervised** agent → capability → work mode, on a Wayland modal shell.
+**Deliverable:** bootable image (**QEMU-first** OK for bring-up; real HW for CRIU/local-LLM claims) where the normal path is goal → **supervised** agent → capability → work mode, on a Wayland modal shell.
 
 ## In scope
 
@@ -16,7 +16,9 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Desktop | Wayland; modal focus (mode + agent); multi-window allowed, not default |
 | Context | Shared project/workspace across views |
 | Agent supervisor | Units + policy: start/stop; action log; at least two agent identities |
-| CRIU | **First-class + kernel-deep:** validated with the kernel we ship; supervisor dump/restore of canonical agent tree; automated restore test on primary real-hardware profile ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| CRIU | **First-class + kernel-deep:** supervisor dump/restore of canonical agent tree; test on QEMU and/or primary real-hardware profile ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Model path | Documented dual-stack direction; v1 may be remote-first + local stub ([MODEL_STACK.md](./MODEL_STACK.md)) |
+| Wedge | Harness uniqueness clear—not only chat CLI ([WEDGE.md](./WEDGE.md)) |
 | Agents | Goal entry; read and act under ACLs; status, stop, log; durable data paths; dump-friendly **link/load layout** required for the happy path |
 | Isolation | Per-agent Unix user + unit sandbox + ACLs; no default “run as me” |
 | Durability | btrfs (or honest fallback) for agent/workspace paths; snapshots as default backup story when available |
