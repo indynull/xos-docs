@@ -1,15 +1,21 @@
 # Changelog
 
-## 2026-07-23 (drop EESSI; linkers/loaders + Cosmo libc + kernel CRIU)
+## 2026-07-23 (Cosmo not system libc; formats/debug; wipe site-stack slogans)
 
-- **Removed EESSI** as wrong layer for agent restore reliability.
-- **Right layer:** linkers, loaders, libc identity ([product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)); Cosmopolitan as **libc alternative**.
-- **CRIU:** first-class and **kernel-deep**—integrated with the kernel/profile we ship, not a random package bolt-on.
-- Deleted `product/BUILD_DEPLOY.md`; rewired brief, vision, technical shape, v1, success, capabilities, principles, decision, governance, alternative tracks, README, checkpointing, hardware profiles.
+- Cosmopolitan: optional portable single-binary only—**not** system libc (team consensus).
+- Runtime ABI expanded: executable/lib **formats**, linkers, loaders, **debug symbols/build-id**; speculative Rust libc noted as non-v1.
+- CRIU remains first-class + kernel-deep ([criu.org](https://criu.org/)).
+- Removed all remaining site-module-stack product framing from live docs.
 
-## 2026-07-23 (profiles, first-class CRIU, EESSI-class stack — superseded)
+## 2026-07-23 (linkers/loaders + kernel-deep CRIU)
 
-- Hardware profiles + first-class CRIU; EESSI-class stack later replaced by linkers/loaders (see above).
+- Right layer for hit-or-miss agent restore: linkers/loaders/runtime identity ([product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)).
+- CRIU first-class and integrated with the kernel/profile we ship.
+- Dropped multi-site package-stack product shape for restore reliability.
+
+## 2026-07-23 (profiles, first-class CRIU)
+
+- Hardware profiles + first-class CRIU; later refined by linkers/loaders pass.
 
 ## 2026-07-23 (team thread — systemd, btrfs, Archy/Enso, hardware)
 
@@ -23,14 +29,11 @@
 
 - **CRIU** (Checkpoint/Restore In Userspace; often “ciru”): supervisor-owned freeze/restore of agent trees; session snapshots; warm start; hung-agent dump.
 - New [concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md); wired into technical shape, agents, security, v1, brief, vision, decision, governance, alternative tracks, README.
-- v1: optional dump/restore of one simple agent tree; not full DE C/R or live migration as the demo.
 
-## 2026-07-23 (Rohit pass — multicall / Cosmopolitan base)
+## 2026-07-23 (Rohit pass — multicall base)
 
-- **Base architecture:** think larger than “trimmed distro”—Linux + BusyBox-class multicall core, optional Cosmopolitan/APE portable tools for capabilities/bootstrap, heavier tools as layers.
+- Base architecture: Linux + BusyBox-class multicall core; heavier tools as layers.
 - Edge *product* stays out of v1; multicall technique is in-scope as the base strategy.
-- Cosmopolitan is not the whole desktop; busybox-only with no goal path is not enough.
-- Updated technical shape, brief, vision, principles, non-goals, v1, decision, governance, problem, alternative tracks, README.
 
 ## 2026-07-23 (Rohit pass — shell, supervisor, isolation, optimizations)
 

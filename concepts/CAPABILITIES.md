@@ -26,7 +26,7 @@ Some capabilities are **built into the OS**, not only user-wired:
 |---------------------|------|
 | **CRIU checkpoint/restore** | First-class, kernel-deep; supervisor-mediated freeze/resume ([CHECKPOINTING.md](./CHECKPOINTING.md)) |
 | **btrfs snapshot / send** | Durable agent/workspace points |
-| **Declared runtime ABI** | Linker/loader/libc (glibc and/or Cosmopolitan) for binaries a capability runs ([../product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)) |
+| **Declared runtime ABI** | Format/linker/loader/system-libc expectations for binaries a capability runs ([../product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)) |
 
 User-built capabilities should **declare** permissions and runtime needs so restore and reuse stay reliable.
 

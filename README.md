@@ -6,7 +6,7 @@ Design notes for a Linux desktop that starts from **what you want to do**, not f
 goal  →  capability  →  result   (in a work mode)
 ```
 
-**Spine (product shape):** Wayland + modal shell (Archy/Enso-informed) · agents as user + unit + ACLs + durable data · kernel-deep first-class CRIU + btrfs · hardware profiles · linker/loader/libc policy (Cosmopolitan as libc alternative) · multicall core. QEMU is CI smoke, not the story.
+**Spine (product shape):** Wayland + modal shell (Archy/Enso-informed) · agents as user + unit + ACLs + durable data · kernel-deep first-class CRIU + btrfs · hardware profiles · formats/linkers/loaders/system libc/debug · multicall core. QEMU is CI smoke, not the story.
 
 ---
 

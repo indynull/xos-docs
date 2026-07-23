@@ -19,7 +19,7 @@ Someone who does real work tries the image for an afternoon (on real hardware wh
 - [ ] Supervisor: status, stop, and action log for non-trivial steps  
 - [ ] **CRIU first-class on our kernel:** dump → restore → agent continues a known task (primary profile); fail-soft only after real attempt  
 - [ ] Agent data/workspace paths durable; btrfs snapshots when the image uses btrfs  
-- [ ] Documented **linker/loader/libc policy** for the canonical agent tree  
+- [ ] Documented **formats + linker/loader + system libc + debug** policy for the canonical agent tree  
 - [ ] At least two agent identities with distinct users/units/ACLs  
 - [ ] Create (or register) a capability and use it again  
 - [ ] Real Develop session  

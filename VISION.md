@@ -26,7 +26,7 @@ goal  →  skill (capability)  →  result
 | **Agent identity** | Each agent: Unix user + unit + ACLs + durable data paths. Rights are granted, not inherited wholesale from the human |
 | **Desktop surface** | Wayland + modal UI: work mode and agent interaction at the center; many windows possible, not the default. Lineage: Archy/Enso-style command focus ([concepts/UX_LINEAGE.md](./concepts/UX_LINEAGE.md)) |
 | **Base system** | Linux + **btrfs** + **small multicall core**, **hardware profiles**, real optimizations. Not “Ubuntu minus packages.” |
-| **Runtime ABI** | Linkers, loaders, libc identity—glibc and/or **[Cosmopolitan](https://github.com/jart/cosmopolitan) as libc alternative** ([product/LINKERS_LOADERS.md](./product/LINKERS_LOADERS.md)) |
+| **Runtime ABI** | Executable/lib formats, linkers, loaders, system libc, debug symbols—designed for CRIU-friendly agent trees ([product/LINKERS_LOADERS.md](./product/LINKERS_LOADERS.md)) |
 | **Fallback** | Full browser or normal app when the short path does not fit |
 
 **Reuse:** the first time you connect a painful system costs effort and review. Later times should be a short goal, not the same UI maze.
@@ -83,7 +83,7 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 12. Shell is native (CLI + plain language), not an afterthought  
 13. Durable agent state on disk (btrfs); **first-class, kernel-deep CRIU** with tested restores  
 14. Hardware-aware base; QEMU is not the product  
-15. Explicit linker/loader/libc policy (Cosmopolitan as libc alternative is in-scope)  
+15. Explicit formats + linker/loader + system libc + debug identity (not Cosmo-as-system-libc)  
 
 → [principles/PRINCIPLES.md](./principles/PRINCIPLES.md)
 
@@ -110,6 +110,6 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 
 ## Team decision
 
-One product: goal-first desktop (Archy/Enso-informed), capabilities, supervised agents (user + unit + ACLs + btrfs data), **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, Cosmopolitan-as-libc and linker/loader policy. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos as the product) stay separate.
+One product: goal-first desktop (Archy/Enso-informed), capabilities, supervised agents (user + unit + ACLs + btrfs data), **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, real system libc + linker/loader/format policy. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos as the product) stay separate.
 
 → [product/DECISION.md](./product/DECISION.md)

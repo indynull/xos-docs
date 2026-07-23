@@ -14,7 +14,7 @@ Agent restore in the wild is often **hit-or-miss** (unsupported fds, library dri
 |-----------|-----------|
 | **Default agent layout is dump-friendly** | Ordinary files, pipes, sockets; no mystery devices on the happy path |
 | **Supervisor owns dump/restore** | One code path; tested; logged |
-| **Runtime ABI under the agent** | Same linker/loader/libc graph at dump and restore ([../product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)); Cosmopolitan-linked trees where that helps |
+| **Runtime ABI under the agent** | Same linker/loader/system-libc graph at dump and restore ([../product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)) |
 | **Kernel we ship** | CRIU is integrated with the **project kernel/profile**—not bolted onto a random distro kernel ([../product/HARDWARE_PROFILES.md](../product/HARDWARE_PROFILES.md)) |
 | **Honest degrade** | If dump fails: structured error + btrfs durability + resume-from-log—not silent corruption |
 | **CI + metal** | Restore tests on real hardware for the primary profile; QEMU optional extra |
@@ -102,18 +102,18 @@ Upstream CRIU scenarios that map cleanly: slow-boot speedup, app snapshots, hung
 
 | Limit | Implication for us |
 |-------|---------------------|
-| Linux + kernel feature surface | Fits our Linux base; not Cosmopolitan-portable as the dump tool itself |
+| Linux + kernel feature surface | Fits our Linux base; CRIU is host/kernel-bound |
 | Kernel / CPU feature parity on restore | Migration needs versioned base + `cpuinfo` checks; btrfs data migrates more easily than CRIU images |
 | Not everything can be dumped | Design dump-friendly agent trees; rely on btrfs for durable truth |
 | Wayland / full DE C/R | Hard; do not bet v1 on whole-desktop CRIU |
 | Security of image files | CRIU image = memory/secrets; same care as swap; btrfs snaps of secrets dirs need same rules |
 | License | CRIU GPLv2; packaging separation discipline |
 
-## Relation to multicall / Cosmopolitan base
+## Relation to multicall base and runtime ABI
 
 - Ship CRIU integrated with the **kernel we build**; btrfs-progs on the image.  
 - Multicall core stays small; CRIU + btrfs are explicit **base layers** for agent runtime durability.  
-- Cosmopolitan as **libc alternative** can make agent trees more restore-friendly; APE for portable skills. Checkpoint images remain host/kernel-bound.
+- Agent trees use real **system libc** + dump-friendly link/load policy. Checkpoint images remain host/kernel-bound.
 
 ## Kernel-deep CRIU (big idea)
 
@@ -121,7 +121,7 @@ CRIU is not “install a package and hope.” For xOS it is a **base feature of 
 
 - Kernel config and features required for C/R are part of each **hardware profile**.  
 - Breakages between our kernel and CRIU are **base bugs**, not user error.  
-- Userspace policy (dump-friendly link/load, Cosmo vs glibc) is designed **with** that kernel, not against a random host.  
+- Userspace policy (dump-friendly link/load, system libc) is designed **with** that kernel, not against a random host.  
 - Optional later: tighter kernel support for agent-oriented freeze if something earns its keep (distinct from vague “agentic -rt” tourism).
 
 ## Hardware and performance
@@ -134,7 +134,7 @@ CRIU and btrfs are not a substitute for **real-hardware kernel and driver profil
 |----------------------|--------|
 | CRIU **on the image** and **validated against our kernel/profile**; supervisor dump/restore of the **canonical agent tree** | Cross-machine migrate |
 | Automated test: dump → restore → agent continues a known task (real hardware, primary profile) | Incremental series UI; GPU |
-| Documented linker/loader/libc policy for that tree (glibc and/or Cosmo) | Broader Cosmo-linked agent cores |
+| Documented linker/loader/system-libc + debug policy for that tree | Speculative alternate system libc research |
 | btrfs default for agent homes / workspaces when the image allows | Full DE C/R |
 | systemd (or compatible) unit per agent identity | Deeper custom kernel C/R hooks if measured |
 | Fail-soft only after a real dump attempt; never pretend success | Tight CRIU+snap orchestration UI |

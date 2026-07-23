@@ -1,62 +1,89 @@
-# Linkers, loaders, and runtime identity
+# Linkers, loaders, formats, and runtime identity
 
 Parent: [../VISION.md](../VISION.md) · See: [TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md) · [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md) · [HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md)
 
-## Wrong layer vs right layer
+## Right layer for agent restore
 
-Hit-or-miss **agent restore** is often blamed on “the package stack.” That is usually the **wrong layer**.
+Hit-or-miss **agent restore** is not fixed by a shared site package narrative. CRIU freezes a process defined by:
 
-The process CRIU freezes is defined by **how it was linked and how the dynamic loader resolves it**: libc identity, ELF interpreter, `rpath`/`runpath`, symbol versions, open DSOs, TLS, vDSO, and whether the tree is mostly static or a web of shared libs. If those move under the agent between dump and restore, restore fails—no amount of module-tree pinning at the *wrong* abstraction fixes that cleanly.
+- how it was **linked**  
+- how the **dynamic loader** resolves it  
+- which **executable / library format** it uses  
+- what **debug symbols** and build-ids attach when something goes wrong  
 
 ```text
-wrong layer:  “same module stack on every site” (site package narrative)
-right layer:  linker + loader + libc/runtime identity for agent trees
+right layer:  linker + loader + formats + debug identity + system libc
+wrong layer:  multi-site “same modules everywhere” product stories
 ```
 
-## What we care about
+If ELF interpreter, sonames, symbol versions, open DSOs, TLS, or vDSO coupling drift between dump and restore, CRIU fails. Design that graph; do not paper over it with distribution packaging slogans.
 
-| Concern | Direction |
-|---------|-----------|
-| **Loader identity** | Known ELF interpreter and loader policy for agent and capability binaries |
-| **Libc path** | Explicit: system glibc **and/or** [Cosmopolitan](https://github.com/jart/cosmopolitan) as a **libc alternative** for chosen trees—not accidental mix |
-| **Static vs dynamic** | Prefer dump-friendly layouts: fewer floating DSOs on the agent happy path; static or APE where it pays |
-| **Symbol / ABI stability** | Agent trees pin *runtime* ABI (sonames, symbol versions), not a vague “stack id” from a foreign site |
-| **Restore contract** | Dump and restore see the same loader-visible graph (paths, inodes of DSOs, or static blob) |
-| **Pluggable allocators** | Fits base toolchain work (malloc choice is a link/load decision too) |
+## What “OS” means here (runtime)
 
-## Cosmopolitan as libc alternative
+When we say OS base, we also mean:
 
-[Cosmopolitan Libc](https://github.com/jart/cosmopolitan) / APE is not only “portable helpers.” It is an interesting **libc alternative** for xOS:
+| Piece | Why it matters |
+|-------|----------------|
+| **Executable format** | ELF (and any deliberate alternatives); load address, interp, notes |
+| **Library format** | Shared objects, versioning, how agents open them |
+| **Linker** | How agent and capability binaries are produced (static vs dynamic, rpath) |
+| **Loader / dynamic linker** | Policy for the agent happy path; one story, not accidental mix |
+| **Debug symbols / build-id** | Restore failures and hung agents must be diagnosable; symbols are part of the base story |
+| **System libc** | Real system libc (typically glibc, or another **true** system libc if the team chooses)—not a demo single-binary libc |
 
-| Use | Why |
+## System libc (default)
+
+| Direction | Notes |
+|-----------|--------|
+| **System libc is real** | Agents, desktop, and CRIU-facing trees run on a normal system libc path we control and optimize (pluggable mallocs, etc.) |
+| **One policy** | Document which libc, which loader, static vs dynamic defaults for the **canonical agent tree** |
+| **Dump-friendly** | Prefer fewer floating DSOs on the agent happy path; freeze DSO set with agent subvol when dynamic |
+| **Restore contract** | Dump and restore see the same loader-visible graph |
+
+### Speculative later (not v1 product)
+
+| Idea | Status |
+|------|--------|
+| Replace system libc with a **Rust-implemented** runtime + shims (e.g. via FFI) | Research-grade; would need heavy work; interesting because Grok can help extend it—not a v1 commitment |
+| Custom executable or library formats beyond ELF | Only if measured need; ELF first |
+
+Do not block shell, agents, or CRIU on speculative libc replacement.
+
+## Cosmopolitan / APE (interesting, not system libc)
+
+[Cosmopolitan](https://github.com/jart/cosmopolitan) / APE is **interesting for single-binary, run-on-many-hosts demos**—not a realistic **system libc** for this OS.
+
+| Use | Fit |
 |-----|-----|
-| Agent helpers and capabilities | One blob; fewer host DSO surprises at restore |
-| Bootstrap / recovery tools | Run without a full glibc root |
-| Experiments | Compare Cosmo-linked agent trees vs glibc for CRIU reliability and size |
-| Not default for everything | Compositor, full Develop IDE, and heavy desktop stacks may stay on system libc initially |
+| Show-off / portable one-shot tools | Yes, optional |
+| Bootstrap experiment | Maybe |
+| System libc for agents, desktop, CRIU core | **No** — not usable in that role for this project |
+| Framing as “build once run anywhere like Java” | Avoid; wrong product story |
 
-Policy: **declare** which libc/runtime a binary uses. Supervisor and CRIU paths should not guess.
+Keep Cosmopolitan off the critical path. System identity is ELF + real system libc + our linker/loader policy.
 
-## CRIU and the linker/loader story
+## CRIU and this layer
 
-| Restore failure class | Linker/loader response |
-|----------------------|-------------------------|
-| Missing `.so` after upgrade | Static or APE agent cores; or freeze DSO set with the agent subvol |
-| Different libc | Same libc build on dump host; Cosmo trees avoid host libc drift |
-| Wrong ELF interpreter | Image and agent install share one interpreter policy |
-| TLS / vDSO / kernel coupling | Hardware/kernel profile must match CRIU needs ([HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md); deep CRIU+kernel integration) |
+| Restore failure class | Response |
+|----------------------|----------|
+| Missing `.so` after upgrade | Static agent cores or freeze DSO set on agent subvol |
+| Different libc build | Same system libc on dump and restore; kernel/profile we ship |
+| Wrong ELF interpreter | One interpreter policy on the image |
+| Undebuggable dump failure | build-id + symbols policy for agent trees |
+| TLS / vDSO / kernel coupling | CRIU **kernel-deep** with the kernel we ship ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
 
-CRIU remains **first-class** and **kernel-deep** ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)). Linkers/loaders make the *userspace half* of restore boring.
+**CRIU is first-class** ([criu.org](https://criu.org/)): on-image, supervisor-owned, tested dump→restore, integrated with our kernel—not a hit-or-miss optional package.
 
 ## What this is not
 
 - Not a multi-site scientific software distribution product.  
-- Not “install Spack/EasyBuild/EESSI and call it done.”  
-- Not forcing every binary through Cosmopolitan on day one.
+- Not Cosmopolitan-as-system-libc.  
+- Not “rewrite libc in Rust” as a v1 gate.  
+- Not ignoring formats and debug info.
 
 ## v1 expectation
 
-- Document **runtime policy** for the canonical agent tree: libc (glibc and/or Cosmo), static vs dynamic, interpreter.  
-- CRIU dump→restore test uses that policy on the primary hardware profile.  
-- Cosmopolitan path demonstrated for at least one capability or agent helper (stretch OK if kernel/CRIU path is higher priority).  
-- Toolchain work (pluggable mallocs, clang opts) stays aligned with how we *link* what we ship.
+- Document runtime policy for the **canonical agent tree**: system libc, loader, static vs dynamic, symbol/debug expectations.  
+- CRIU dump→restore test on primary hardware profile uses that policy and our kernel.  
+- Cosmopolitan: optional curiosity only; not required for v1.  
+- Toolchain opts (malloc, clang) stay aligned with how we **link** what we ship.

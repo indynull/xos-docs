@@ -6,7 +6,7 @@ Parent: [../VISION.md](../VISION.md)
 
 Agree on **one product**:
 
-> A goal-first desktop (Archy/Enso-informed) with reusable capabilities, supervised OS agents (per-agent user + unit + ACLs + durable data; kernel-deep first-class CRIU + btrfs), and a Wayland modal shell (CLI + plain language), on a radical small, hardware-profiled base with explicit linker/loader/libc policy (Cosmopolitan as libc alternative in-scope). Show it works on real tasks before calling it an OS.
+> A goal-first desktop (Archy/Enso-informed) with reusable capabilities, supervised OS agents (per-agent user + unit + ACLs + durable data; kernel-deep first-class CRIU + btrfs), and a Wayland modal shell (CLI + plain language), on a radical small, hardware-profiled base with real system libc and explicit executable/lib format, linker, loader, and debug policy. Show it works on real tasks before calling it an OS.
 
 ## Options
 
