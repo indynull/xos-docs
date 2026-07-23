@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-23 (HCI research, ookcite collection, bib export, voice)
+
+- Ookcite collection **`xos-docs`**; curated export [refs/xos-docs.bib](../refs/xos-docs.bib).
+- HCI notes grounded in Amershi, Horvitz, Shneiderman, Raskin, DirectGPT, explainability survey ([context/HCI.md](../context/HCI.md)).
+- BRIEF rewritten denser (mechanism-first, cite keys); novelty/refs point at collection + bib.
+- proseguard `prose-human` run on spine prose (see gate log in commit if present).
+
 ## 2026-07-23 (ground references + honest novelty)
 
 - Add [context/REFERENCES.md](../context/REFERENCES.md): ookcite-validated DOIs (CRIU, CRIUgpu, Btrfs, snmalloc, Humane Interface review) + primary URLs (criu.org, MCP spec, Cosmopolitan, BusyBox, llama.cpp, team kernel/archiso).
