@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-23 (stay near libc; OS vs DE; malloc caution)
+
+- **v1:** use existing system libc; alternate libc / Rust+shim is **future** (browser-on-new-libc is proposal-sized).
+- Apps depend on libc **implementation details and bugs**; pluggable malloc (e.g. snmalloc) needs app-matrix gates (Chromium-class crash class).
+- **Not just a Sway/DE fork:** [product/OS_VS_DE.md](../product/OS_VS_DE.md)—goal-first surface + OS-adjacent base; browser is app layer.
+- Ali/Bernhard consensus: stay closer to libc when departure is not necessary.
+
 ## 2026-07-23 (Cosmo not system libc; formats/debug; wipe site-stack slogans)
 
 - Cosmopolitan: optional portable single-binary only—**not** system libc (team consensus).

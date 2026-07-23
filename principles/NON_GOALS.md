@@ -15,9 +15,11 @@ Things we are **not** trying to be. Saying no keeps the project clear.
 | Full multi-arch distro as v1 | Too large for the first proof |
 | New kernel from scratch (v1) | Use Linux; own the desktop/agent layer; optimize what we ship |
 | Cosmopolitan as system libc | Interesting for single-binary demos; not usable as system libc here |
-| Multi-site package/module stacks as the restore fix | Wrong layer; fix formats/linkers/loaders/system libc and kernel-deep CRIU |
+| Full libc replacement in v1 (Rust/FFI shims, etc.) | Future-scale; apps depend on libc details/bugs; browser port alone is huge |
+| Multi-site package/module stacks as the restore fix | Wrong layer; formats/linkers/loaders + kernel-deep CRIU |
 | “Build once run anywhere” as product identity | Avoid Java-style slogans; ship a real OS runtime |
-| Browser as the main product | Engine is fine; browse-first is not |
+| Browser as the main product | App layer; embed when needed; not the nucleus |
+| “Just a Sway/DE alternative” as the product | Compositor is a piece; product is goals + agents + OS-adjacent base |
 | Apps as the only way to work | Goals and capabilities come first |
 | Endless UI customization | Defaults should be strong; modal focus over window soup |
 | Mobile or edge *product* as v1 | Different product; multicall base technique may still be shared |

@@ -24,7 +24,8 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Develop | Real edit + terminal + agent session |
 | Security | Written rules match behavior ([SECURITY.md](./SECURITY.md)) |
 | Base | Multicall-leaning core; at least one **hardware profile** ([HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md)); not QEMU-as-product |
-| Runtime ABI | Documented formats + linker/loader + system libc + debug policy for the agent tree ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)) |
+| Runtime ABI | Stay near **existing system libc**; documented formats + linker/loader + debug policy ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)); no novel libc on critical path |
+| Product shape | Goal-first surface + agents—not only a compositor/DE fork ([OS_VS_DE.md](./OS_VS_DE.md)) |
 
 ### Capability shapes (pick concrete targets later; keep the shape)
 

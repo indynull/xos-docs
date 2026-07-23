@@ -100,9 +100,9 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 - create one non-trivial capability and use it again  
 - at least two agents under the supervisor with distinct users/ACLs  
 - CRIU dump → restore of the canonical agent path on a real-hardware profile (our kernel)  
-- documented linker/loader/libc policy for that agent tree  
+- documented linker/loader/**system libc**/debug policy for that agent tree  
 
-**Fail if:** pretty ISO + chat on a normal desktop, only gimmick demos, “it boots in QEMU” with no real-work path, or agent restore is untested roulette.
+**Fail if:** pretty ISO + chat on a normal desktop, only gimmick demos, “it boots in QEMU” with no real-work path, agent restore is untested roulette, or the demo is only “another compositor.”
 
 → [product/V1_SCOPE.md](./product/V1_SCOPE.md) · [product/SUCCESS_CRITERIA.md](./product/SUCCESS_CRITERIA.md)
 
@@ -110,6 +110,6 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 
 ## Team decision
 
-One product: goal-first desktop (Archy/Enso-informed), capabilities, supervised agents (user + unit + ACLs + btrfs data), **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, real system libc + linker/loader/format policy. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos as the product) stay separate.
+One product: goal-first desktop (Archy/Enso-informed)—not just a DE fork—with capabilities, supervised agents, **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, **near-stock system libc for v1**, formats/linkers/loaders/debug. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos, libc rewrites) stay separate or later.
 
 → [product/DECISION.md](./product/DECISION.md)

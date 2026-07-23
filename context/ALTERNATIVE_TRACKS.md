@@ -14,7 +14,9 @@ Related ideas that are **not automatically this project**. Keep them separate so
 | systemd unit isolation | Per-agent services, sandbox, restarts | **In** as lifecycle/isolation backbone (or compatible) |
 | Archy / Enso | Humane command nucleus, persistence, lightweight invoke | **Inspiration** ([../concepts/UX_LINEAGE.md](../concepts/UX_LINEAGE.md)); not a clone |
 | Custom kernel / install profiles | Real-hardware opts ([linux-rg](https://github.com/HaoZeke/linux-rg)-style, [hzArchiso](https://github.com/HaoZeke/hzArchiso)-style discipline); CRIU-capable | **In** ([../product/HARDWARE_PROFILES.md](../product/HARDWARE_PROFILES.md)); not QEMU-as-product |
-| Rust-as-system-libc + shims | Research alternate libc | Speculative; not v1 |
+| Rust-as-system-libc + shims | Research alternate libc | **Future version**; browser-on-new-libc is proposal-sized |
+| Pluggable malloc under glibc | e.g. snmalloc speedups | **In** carefully; gate on app matrix (Chromium-class breakage) |
+| Sway / DE clone as the project | Tiling WM product | **Out**—compositor is a piece, not the product ([../product/OS_VS_DE.md](../product/OS_VS_DE.md)) |
 | **xOS (this repo)** | Goal-first desktop + capabilities + supervised agents | Main idea here |
 | App-in-a-box “OS” | Avoid drivers; userspace environment | Can sit beside |
 | App store / platform | Plugins and stable APIs | Later, not v1 core |

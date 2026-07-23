@@ -54,17 +54,16 @@ That is closer to **Talos / appliance multicall** thinking (kernel + one coheren
 
 The agent supervisor and shell can sit **beside** the multicall core, or parts of them can be applets of a larger multicall. Product rule: the human still sees one goal path; process layout is an implementation detail.
 
-### Cosmopolitan / APE (optional, not system libc)
+### System libc and Cosmopolitan
 
-[Cosmopolitan](https://github.com/jart/cosmopolitan) is fine for **single-binary portable demos**. It is **not** a usable system libc for this OS (desktop + agents + CRIU). Do not frame it as “build once run anywhere” product identity.
-
-- Optional: one-shot tools, experiments.  
-- Critical path: real system libc + ELF + our linker/loader policy ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)).  
-- Speculative later: alternate system libc (including research Rust+shim ideas)—not v1.
+- **v1 critical path:** real **system libc** (glibc-class), ELF, linker/loader policy ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)). Stay close to what apps already assume.  
+- **Cosmopolitan / APE:** optional single-binary demos only—not system libc.  
+- **Rust (or other) libc replacement:** future version territory; browser-on-new-libc is proposal-sized alone.  
+- **Pluggable mallocs:** real gains possible (e.g. snmalloc under glibc for compile speed) **and** real breakage (Chromium-class apps relying on glibc malloc quirks). Gate defaults with an app matrix.
 
 ### What we still optimize
 
-Even with a tiny core, **speed of real work** matters: allocators, compiler/runtime choices, kernel config, hot-path patches. Multicall + portable tools are about **shape and surface**; optimizations are about **measured performance** on real hardware.
+Even with a tiny core, **speed of real work** matters: allocators (carefully), compiler/runtime choices, kernel config, hot-path patches. Measure on metal. Do not optimize the base into “apps won’t start.”
 
 ### Hardware profiles (not QEMU-first)
 
@@ -87,13 +86,15 @@ QEMU is CI smoke. Product and performance work target **real machines**. Full wr
 
 Hit-or-miss agent restore is often a **linker/loader/format/libc** problem. Fix runtime identity of agent trees; pair with kernel-deep CRIU. Full write-up: [LINKERS_LOADERS.md](./LINKERS_LOADERS.md).
 
-## Desktop and shell
+## Desktop and shell (not “just a Sway fork”)
+
+Product is **goal-first OS surface + OS-adjacent agent base**, not an alternate tiling WM as the project ([OS_VS_DE.md](./OS_VS_DE.md)).
 
 - **Wayland** as the display path. No X11-first design.  
 - **Modal UI:** work mode and agent interaction are the center. Extra windows and tabs exist for workflows that need them; they are not the default layout.  
-- **Shell is first-class:** ordinary command line remains (can be a real shell applet or a dedicated shell binary). Plain-language goals hit the same supervised agent stack (not a second, unconstrained agent).  
+- **Shell is first-class:** ordinary command line remains. Plain-language goals hit the same supervised agent stack.  
 - Surfaces (editor, terminal, files, embedded web) share project/mode context.  
-- Heavier tools (full browser, IDE-class editor) are **opt-in layers**, not the default rootfs bulk.
+- **Browser / full IDE:** application layer—must run on system libc; not the product nucleus; opt-in bulk.
 
 ## Agent supervisor + systemd
 
