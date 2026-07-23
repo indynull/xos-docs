@@ -3,7 +3,8 @@
 Working name: **xOS**. Design only; not built yet.
 
 **Read order:** [BRIEF.md](./BRIEF.md) → this page → [README.md](./README.md) for the rest.  
-**Tech stack bets** (CRIU timing, display server, linker/libc, hardware profiles) live under [product/](./product/) and [concepts/](./concepts/) as **exploration**, not product law—unless repeated here.
+**Tech stack bets** (CRIU timing, display server, linker/libc, hardware profiles) live under [product/](./product/) and [concepts/](./concepts/) as **exploration**, not product law—unless repeated here.  
+**Grounding:** [context/REFERENCES.md](./context/REFERENCES.md) (ookcite-validated DOIs + primaries) · [context/NOVELTY.md](./context/NOVELTY.md) (honest prior art vs hypothesis).
 
 ---
 

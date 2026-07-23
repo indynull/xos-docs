@@ -49,9 +49,9 @@ Formats and debug identity are part of thinking about an OS. They do not require
 
 ### Pluggable mallocs (optimize carefully)
 
-Base toolchain work can include **pluggable mallocs** (e.g. snmalloc under glibc) with real wins—and real breakage.
+Base toolchain work can include **pluggable mallocs**. **snmalloc** is a published concurrent message-passing allocator (Liétar et al., *ISMM 2019*, doi:[10.1145/3315573.3329980](https://doi.org/10.1145/3315573.3329980)).
 
-Documented class of failure: a booting system can compile **~15% faster** with snmalloc replacing glibc malloc, while **Chromium-class browsers crash** because they rely on particular glibc malloc behavior (including over-allocation quirks). Treat that as the rule: **measure, and gate malloc swaps with app matrix tests**—especially browsers and other app-layer beasts—not only compile benchmarks.
+**Team anecdote (not a paper result):** B. Rosenkränzer reported glibc with snmalloc as malloc ~15% faster on compiles and Chromium-class crashes tied to glibc malloc behavioral assumptions. Use that only as motivation for policy: **gate allocator swaps with an app matrix**—especially browsers—not only compile benchmarks. Re-measure before citing numbers as xOS data.
 
 | v1 | Later |
 |----|--------|

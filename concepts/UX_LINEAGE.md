@@ -1,39 +1,36 @@
 # UX lineage (optional inspiration)
 
-Parent: [../VISION.md](../VISION.md) · See: [WORK_MODES.md](./WORK_MODES.md) · [CAPABILITIES.md](./CAPABILITIES.md)
+Parent: [../VISION.md](../VISION.md) · Grounding: [../context/REFERENCES.md](../context/REFERENCES.md)
 
 > **Optional — not required reading, not product identity.**  
-> Parked inspiration only. Skip unless curious.
+> Prior art only. Do not treat as a formal standard or as xOS IP claims.
 
-Not clones. Prior art that still points at the product.
+## Raskin / Archy
 
-## Archy (Jef Raskin)
+Primary: Jef Raskin, *The Humane Interface: New Directions for Designing Interactive Systems*, Addison-Wesley, 2000, ISBN **0-201-37937-6**.
 
-[Archy](https://en.wikipedia.org/wiki/Archy_(software)) (Raskin Center; *The Humane Interface*): content persistence, a **nucleus of commands** instead of app hunting, navigation by incremental text search, zooming UI ideas, humane defaults.
+Secondary: D. Brown, “Review of The humane interface,” *ACM SIGCHI Bulletin* supplement, 2002, doi:[10.1145/967135.967153](https://doi.org/10.1145/967135.967153).
 
-**Map to xOS:**
+Historical software lineage (Archy / Raskin Center) is summarized in secondary encyclopedic sources; use the **book** as the design source of record for:
 
-| Archy idea | xOS shape |
-|------------|-----------|
-| Commands / nucleus, not apps as the unit | Goals + **capabilities** |
-| Content persistence | Workspace + agent memory on **btrfs**; capabilities saved |
-| Search-first navigation | Goal entry / plain-language shell as primary path |
-| Modeless ideals | We still use **work modes** as explicit task context (visible, intentional)—not app windows as mode |
+- content persistence  
+- commands / nucleus rather than app-as-unit  
+- navigation and humane defaults  
 
-We are not rebuilding Archy’s full ZUI in v1. We take the *command and persistence* lesson seriously.
+**Map (loose, not a clone):**
 
-## Enso (Humanized)
+| Raskin-class idea | xOS product shape (hypothesis) |
+|-------------------|--------------------------------|
+| Commands over app hunting | Goals + **capabilities** |
+| Persistence | Durable workspace + agent data (btrfs *preferred*; FS paper: doi:10.1145/2501620.2501623) |
+| Fast command invocation | Dual path: instant tools + goal entry |
 
-Enso: lightweight **command invocation** over the desktop—type a command, act, return—without turning the whole machine into a traditional app launcher.
+We are **not** claiming a full ZUI or Archy reimplementation.
 
-**Map to xOS:** modal / plain-language shell as the center; agents execute under policy; many windows allowed, not required.
+## Enso / Humanized
 
-## What we do not inherit blindly
+Humanized Enso (historical): lightweight command invocation over a desktop session. Treat as HCI prior art (demos / product history), not a peer-reviewed protocol. Same dual-path lesson: type a command, act, return—without making the whole machine a classic app launcher.
 
-| Trap | Avoid |
-|------|--------|
-| Pure modeless dogma | Work modes stay visible; agents stay in mode |
-| Wallpaper / theme as product | Still a non-goal |
-| Research UI with no isolation story | ACLs, units, CRIU/btrfs are product shape |
+## Isolation / capabilities language
 
-Full non-goals: [../principles/NON_GOALS.md](../principles/NON_GOALS.md).
+Unix users, ACLs, and process isolation are standard OS mechanisms—not novel. Academic “capability systems” literature is broader; do not confabulate a specific paper without a DOI from [REFERENCES.md](../context/REFERENCES.md).

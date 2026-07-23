@@ -4,10 +4,11 @@ Parent: [../VISION.md](../VISION.md) · See: [AGENTS.md](./AGENTS.md) · [../pro
 
 > **Exploration / candidate stack — not committed product law.**  
 > **Product intent:** durable agent data + ability to freeze/resume agent process state when we ship it.  
-> **btrfs** (or equal) for homes/workspaces/snapshots is preferred product direction.  
-> **CRIU** is the leading *candidate* for process checkpoint/restore. When we commit to shipping CRIU, **kernel-deep + tested restore** is the right bar—that timing is **not** a v1 pass/fail gate.
+> **btrfs** (or equal) preferred for homes/workspaces/snapshots—design surveyed in Rodeh, Bacik, Mason, *ACM TOS* 2013, doi:[10.1145/2501620.2501623](https://doi.org/10.1145/2501620.2501623).  
+> **CRIU** ([criu.org](https://criu.org/)) is the leading *candidate* for Linux process C/R; scientific use discussed e.g. Andrijauskas et al. 2024, doi:[10.1051/epjconf/202429507046](https://doi.org/10.1051/epjconf/202429507046). GPU path: Stoyanov et al., arXiv 2025, doi:[10.48550/arXiv.2502.16631](https://doi.org/10.48550/arXiv.2502.16631).  
+> When we commit to shipping CRIU, **kernel-deep + tested restore** is the right bar—not a v1 pass/fail gate today.
 
-**Name note:** often typed “ciru”; the project is **[CRIU](https://criu.org/)** — Checkpoint/Restore In Userspace (pronounced *kree-oo*).
+**Name note:** often typed “ciru”; **CRIU** = Checkpoint/Restore In Userspace.
 
 ## Direction: process freeze as a platform skill (when committed)
 

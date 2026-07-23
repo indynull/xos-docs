@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-23 (ground references + honest novelty)
+
+- Add [context/REFERENCES.md](../context/REFERENCES.md): ookcite-validated DOIs (CRIU, CRIUgpu, Btrfs, snmalloc, Humane Interface review) + primary URLs (criu.org, MCP spec, Cosmopolitan, BusyBox, llama.cpp, team kernel/archiso).
+- Add [context/NOVELTY.md](../context/NOVELTY.md): prior art table; product hypothesis only where composition might differ; ban marketing ungrounded novelty.
+- Label snmalloc/Chromium “15%” as **team anecdote**, not literature.
+- Wire REFERENCES/NOVELTY into README, VISION, CHECKPOINTING, UX_LINEAGE, LINKERS_LOADERS, TECHNICAL_SHAPE, CAPABILITIES.
+
 ## 2026-07-23 (design review: demote tech locks from product law)
 
 - Response to PR design review (changes requested): keep product spine; demote implementation bets.

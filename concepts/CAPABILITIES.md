@@ -4,7 +4,7 @@ Parent: [../VISION.md](../VISION.md) · See: [AGENTS.md](./AGENTS.md) · [../pro
 
 ## What one is
 
-A **capability** is a saved way to use a system: internal service, vendor tool, repo, file format, API, website. Tool shape can follow MCP or anything similar.
+A **capability** is a saved way to use a system: internal service, vendor tool, repo, file format, API, website. Tool wire-up may follow open agent-tool protocols such as the **Model Context Protocol (MCP)** ([spec](https://modelcontextprotocol.io/specification/2025-11-25))—a *protocol choice*, not an xOS invention.
 
 ```text
 goal → do we have a capability?

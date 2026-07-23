@@ -18,7 +18,7 @@ A **supervisor** (policy layer on top of **systemd-class units**, or units alone
 
 The human talks to the system (modal shell / goal entry). The supervisor talks to agents. Agents do not become a free-for-all mesh.
 
-**Lifecycle upgrade path:** `stop` is not only SIGTERM. Soft path: CRIU dump of the agent tree (images on that agent’s btrfs subvol) → optional unit stop → later restore and continue. Always keep durable agent **memories and workspace** on disk (snapshotted). If CRIU dump fails, kill unit + resume from capability/action log; data remains. Design trees to be dump-friendly (ordinary files, pipes, sockets).
+**Lifecycle:** always keep durable agent **memories and workspace** on disk. Soft stop should prefer clean unit stop + saved capability/action log. Process-level freeze/resume (CRIU candidate) is direction when we ship it—not required for the product story today.
 
 ## Identity
 

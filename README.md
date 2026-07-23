@@ -31,7 +31,7 @@ If a detail file disagrees with the brief or one-pager, fix the detail file **or
 | Ideas | [concepts/WORK_MODES.md](./concepts/WORK_MODES.md) · [concepts/CAPABILITIES.md](./concepts/CAPABILITIES.md) · [concepts/AGENTS.md](./concepts/AGENTS.md) |
 | Product | [product/WEDGE.md](./product/WEDGE.md) · [product/DECISION.md](./product/DECISION.md) · [product/V1_SCOPE.md](./product/V1_SCOPE.md) · [product/SUCCESS_CRITERIA.md](./product/SUCCESS_CRITERIA.md) · [product/OS_VS_DE.md](./product/OS_VS_DE.md) · [product/SECURITY.md](./product/SECURITY.md) · [product/GOVERNANCE.md](./product/GOVERNANCE.md) |
 | Exploration (candidates) | [product/TECHNICAL_SHAPE.md](./product/TECHNICAL_SHAPE.md) · [product/MODEL_STACK.md](./product/MODEL_STACK.md) · [product/HARDWARE_PROFILES.md](./product/HARDWARE_PROFILES.md) · [product/LINKERS_LOADERS.md](./product/LINKERS_LOADERS.md) · [concepts/CHECKPOINTING.md](./concepts/CHECKPOINTING.md) · [concepts/UX_LINEAGE.md](./concepts/UX_LINEAGE.md) *(optional)* |
-| Background | [context/PROBLEM.md](./context/PROBLEM.md) · [context/ALTERNATIVE_TRACKS.md](./context/ALTERNATIVE_TRACKS.md) |
+| Background | [context/PROBLEM.md](./context/PROBLEM.md) · [context/ALTERNATIVE_TRACKS.md](./context/ALTERNATIVE_TRACKS.md) · [context/REFERENCES.md](./context/REFERENCES.md) · [context/NOVELTY.md](./context/NOVELTY.md) |
 | Process | [meta/HOW_TO_ITERATE.md](./meta/HOW_TO_ITERATE.md) · [meta/CHANGELOG.md](./meta/CHANGELOG.md) |
 
 **Status:** design notes only. Not implemented. Working name: xOS.

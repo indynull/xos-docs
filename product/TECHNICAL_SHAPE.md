@@ -62,7 +62,7 @@ The agent supervisor and shell can sit **beside** the multicall core, or parts o
 - **v1 critical path:** real **system libc** (glibc-class), ELF, linker/loader policy ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)). Stay close to what apps already assume.  
 - **Cosmopolitan / APE:** optional single-binary demos only—not system libc.  
 - **Rust (or other) libc replacement:** future version territory; browser-on-new-libc is proposal-sized alone.  
-- **Pluggable mallocs:** real gains possible (e.g. snmalloc under glibc for compile speed) **and** real breakage (Chromium-class apps relying on glibc malloc quirks). Gate defaults with an app matrix.
+- **Pluggable mallocs:** snmalloc is real research (doi:10.1145/3315573.3329980). Team anecdote of compile wins vs Chromium breakage under glibc-malloc replacement—**gate with app matrix**; re-measure ([../context/REFERENCES.md](../context/REFERENCES.md)).
 
 ### What we still optimize
 
