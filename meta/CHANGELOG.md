@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-23 (guided reading list + precis)
+
+- Add [context/READING.md](../context/READING.md): ordered tracks (HCI, systems, primaries) with precis, what each buys / does not buy, and xOS map for every bib key and major URL primary.
+- Wire READING into README, REFERENCES, HCI.
+
 ## 2026-07-23 (HCI research, ookcite collection, bib export, voice)
 
 - Ookcite collection **`xos-docs`**; curated export [refs/xos-docs.bib](../refs/xos-docs.bib).

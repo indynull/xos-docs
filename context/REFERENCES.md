@@ -1,6 +1,6 @@
 # References (grounded)
 
-Parent: [../VISION.md](../VISION.md) · HCI notes: [HCI.md](./HCI.md) · Novelty: [NOVELTY.md](./NOVELTY.md)
+Parent: [../VISION.md](../VISION.md) · **Reading list + precis:** [READING.md](./READING.md) · HCI: [HCI.md](./HCI.md) · Novelty: [NOVELTY.md](./NOVELTY.md)
 
 ## Ookcite collection and BibTeX export
 

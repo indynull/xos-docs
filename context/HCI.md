@@ -1,6 +1,6 @@
 # HCI / UX notes (grounded)
 
-Parent: [../VISION.md](../VISION.md) · Bib: [../refs/xos-docs.bib](../refs/xos-docs.bib) · Collection: ookcite `xos-docs` · Index: [REFERENCES.md](./REFERENCES.md)
+Parent: [../VISION.md](../VISION.md) · Bib: [../refs/xos-docs.bib](../refs/xos-docs.bib) · Collection: ookcite `xos-docs` · **Precis for every cite:** [READING.md](./READING.md) · Index: [REFERENCES.md](./REFERENCES.md)
 
 Exploration, not product law. The spine still wins if we never ship a custom widget kit.
 
