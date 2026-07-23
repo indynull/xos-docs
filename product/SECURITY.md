@@ -14,9 +14,10 @@ Tools that are too broad · bad content tricking the agent · silent money/delet
 
 | Piece | Rule |
 |-------|------|
-| Supervisor | Starts/stops agents; defines allowed IPC; enforces policy hooks; owns CRIU dump/restore |
+| Supervisor / units | Starts/stops agents (systemd-class); sandbox flags; allowed IPC; owns CRIU dump/restore and snapshot policy |
 | Agent user | Distinct from the human login; no default root; no silent “become me” |
 | ACLs | Files, sockets, and tools granted per agent and per capability |
+| Agent data subvols | btrfs paths for memory/workspace; same ACL story; snapshots inherit sensitivity |
 | Checkpoint images | Same sensitivity as process memory / swap; per-agent paths; not world-readable; export off-box is high-risk |
 | Human | Approves high-risk steps; can stop or dump any agent; sees the log |
 | Capabilities | State network, files, secrets, side effects; off until opened |

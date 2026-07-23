@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-23 (team thread — systemd, btrfs, Archy/Enso, hardware)
+
+- **Archy / Enso** as UX lineage (command nucleus, persistence)—not clones ([concepts/UX_LINEAGE.md](../concepts/UX_LINEAGE.md)).
+- **systemd-class units** per agent + ACLs; durable agent memory/data paths.
+- **btrfs** snapshots compose with **CRIU** (data vs process); both in product shape.
+- **Hardware install/kernel profiles**; QEMU not product; agentic kernel patches speculative only.
+- Updated checkpointing, technical shape, agents, security, v1, brief/vision, principles, decision, governance, success criteria, alternative tracks, README.
+
 ## 2026-07-23 (Rohit pass — CRIU checkpointing)
 
 - **CRIU** (Checkpoint/Restore In Userspace; often “ciru”): supervisor-owned freeze/restore of agent trees; session snapshots; warm start; hung-agent dump.

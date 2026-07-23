@@ -8,27 +8,29 @@ Agents are part of the OS. They turn goals into capability calls, and help creat
 
 ## Supervisor
 
-A **supervisor** (supervisord-style) owns agent processes:
+A **supervisor** (policy layer on top of **systemd-class units**, or units alone if enough) owns agent processes:
 
-- start / stop / restart / idle cleanup  
-- **checkpoint / restore** via [CRIU](./CHECKPOINTING.md) when the process tree allows (freeze instead of only kill)  
+- start / stop / restart / idle cleanup via **per-agent units**  
+- **checkpoint / restore**: [CRIU](./CHECKPOINTING.md) for process trees + **btrfs** for durable data  
 - which agents may talk to which (controlled channels)  
-- policy hooks (confirm, log, kill, dump)  
-- mapping each agent to a **Unix user + ACLs**
+- policy hooks (confirm, log, kill, dump, snapshot)  
+- mapping each agent to a **Unix user + ACLs + home/memory paths**
 
 The human talks to the system (modal shell / goal entry). The supervisor talks to agents. Agents do not become a free-for-all mesh.
 
-**Lifecycle upgrade path:** `stop` is not only SIGTERM. Preferred soft path: CRIU dump of the agent tree (images under that agent’s ACL store) → optional leave frozen or exit → later restore and continue. If dump fails, fall back to kill + resume from capability/action log. Design agent trees to be dump-friendly (ordinary files, pipes, sockets; avoid mystery devices).
+**Lifecycle upgrade path:** `stop` is not only SIGTERM. Soft path: CRIU dump of the agent tree (images on that agent’s btrfs subvol) → optional unit stop → later restore and continue. Always keep durable agent **memories and workspace** on disk (snapshotted). If CRIU dump fails, kill unit + resume from capability/action log; data remains. Design trees to be dump-friendly (ordinary files, pipes, sockets).
 
 ## Identity
 
 | | |
 |--|--|
 | **Human user** | Interactive login; modes; approvals |
-| **Agent user** | One per agent (or per agent class); limited home/workspace ACLs |
+| **Agent user** | One Unix account per agent (or class); limited home/workspace ACLs |
+| **Agent unit** | systemd (or compatible) unit: sandbox, cgroup, restart, journal |
+| **Agent data** | Concrete paths (memory, logs, capability local state) on **btrfs** subvol—not only chat context in RAM |
 | **Capability grants** | Extra rights only as declared and opened |
 
-v1 should demonstrate at least two concurrent agents under the supervisor with **distinct** identities, even if the default UI path only surfaces one at a time.
+v1 should demonstrate at least two concurrent agents with **distinct** users/units, even if the default UI path only surfaces one at a time.
 
 ## What an agent does
 

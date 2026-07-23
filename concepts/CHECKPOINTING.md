@@ -1,17 +1,50 @@
-# Checkpointing (CRIU)
+# Checkpointing (CRIU + btrfs)
 
 Parent: [../VISION.md](../VISION.md) · See: [AGENTS.md](./AGENTS.md) · [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md) · [../product/SECURITY.md](../product/SECURITY.md)
 
 **Name note:** often typed “ciru”; the project is **[CRIU](https://criu.org/)** — Checkpoint/Restore In Userspace (pronounced *kree-oo*). GPLv2 utility; freeze a process tree, write images to disk, restore later. Mostly userspace + kernel features (`ptrace`, namespaces, TCP repair, lazy pages, etc.). Ecosystem includes [go-criu](https://github.com/checkpoint-restore/go-criu), Podman/Docker/K8s hooks, experimental GPU paths (`cuda-checkpoint` / CRIUgpu).
 
-## Why it fits xOS
+## Does CRIU fit with btrfs + systemd + ACLs?
+
+**Yes — at a different layer.** They compose; they do not replace each other.
+
+| Layer | Tool | What it freezes / restores |
+|-------|------|----------------------------|
+| **Process / RAM** | CRIU | Running agent tree: memory, open fds, sockets, CPU state |
+| **Filesystem** | **btrfs** subvolume snapshots | Agent homes, workspaces, capability store, CRIU image dirs, OS layers |
+| **Lifecycle / isolation** | **systemd** (or compatible) units | Per-agent units: start, stop, cgroup, sandbox flags, restart policy |
+| **Identity** | Unix user + **ACLs** | Who may read which paths, sockets, and secrets |
+
+```text
+systemd unit (agent-N.service)
+  → process tree under agent-N uid
+  → CRIU dump  →  images on btrfs subvol  →  snapshot that subvol
+  → later: restore snapshot (files) then CRIU restore (process)  — or either alone
+```
+
+With high agentic traffic, **btrfs snapshots become the normal durability story** (workspace + memories + capability blobs). **CRIU** is the sharper tool when you care about *live* process state (warm agent, mid-tool-loop freeze, hung dump). Use both.
+
+### Pairing rules
+
+| Situation | Prefer |
+|-----------|--------|
+| Save project files, agent memory dirs, capability store | btrfs snapshot (fast, cheap, seamless backups) |
+| Park a running agent without losing RAM-side context | CRIU dump; store images on a snapshotted subvol |
+| “Just in case” rollback of a whole agent home | btrfs |
+| Seamless backup / send to another disk | btrfs send/receive |
+| Soft stop in the supervisor | CRIU first; always keep durable state on btrfs |
+| CRIU dump fails | Fall back to kill + resume from log; durable data still on btrfs |
+
+**btrfs is already aligned with core prototypes** under discussion; treat it as the default FS story for agent-heavy installs, not an optional extra.
+
+## Why process checkpointing still matters
 
 Supervised agents are process trees with identity and ACLs. Kill/restart loses expensive context (tool loops mid-run, warm caches, open sockets). CRIU turns **stop** into **freeze and save**, and **start** into **restore where we left off**—when the tree is CRIU-friendly.
 
 ```text
 goal in flight
   → supervisor freezes agent tree (CRIU dump)
-  → images on disk (versioned, ACL-scoped)
+  → images on btrfs (ACL-scoped subvol; optional snapshot)
   → later: restore same uid/paths → continue
 ```
 
@@ -21,62 +54,67 @@ This is OS-level state, not “chat history only.”
 
 | Build-out | Idea | Priority for product |
 |-----------|------|----------------------|
-| **Agent freeze / resume** | Supervisor `stop` = dump; `continue` = restore. Idle agents park to images instead of dying | Core supervisor feature |
-| **Session snapshots** | Named checkpoints of a Develop/Research agent tree + workspace path; revert or branch a run | Strong for real work |
-| **Incremental dumps** | Series of states; roll back a bad agent step without full re-prompt | High value once freeze works |
-| **Warm start** | Checkpoint after agent runtime + tools are loaded; cold boot restores warm agent in seconds | Boot / mode switch speed |
-| **Hung-agent capture** | Dump a stuck agent, restart clean path, debug the dump offline | Ops / security |
-| **Duplicate agent** | Restore same image under a **new** agent user (fork-like); A/B a plan | Advanced multi-agent |
-| **Migrate session** | Dump on machine A, restore on B (same-ish kernel/CPU features)—live “take my desk with me” | Later; needs hardware parity |
-| **Mode switch park** | Leaving Develop dumps agent; returning restores | UX polish |
-| **GPU agent work** | CUDA/ROCm checkpoint with CRIU + vendor tools | Later; experimental stack |
-| **Desktop surface** | Full Wayland session C/R is hard; prefer agent trees and TTY/shell jobs first | Deferred |
+| **Agent freeze / resume** | Supervisor `stop` = CRIU dump; `continue` = restore. Idle agents park instead of dying | Core supervisor feature |
+| **btrfs session/workspace snaps** | Snapshot agent home + project subvols on mode switch or timer | Default durability |
+| **Combined save point** | Named “session”: btrfs snap of data + CRIU image of process (when dump works) | Strong for real work |
+| **Incremental CRIU dumps** | Series of process states; roll back a bad agent step | High value once freeze works |
+| **Warm start** | Checkpoint after runtime loaded; cold boot restores warm agent | Boot / mode switch speed |
+| **Hung-agent capture** | Dump stuck agent; restart clean path; debug offline | Ops / security |
+| **Duplicate agent** | New unit + uid; restore CRIU image and/or clone btrfs subvol | Advanced multi-agent |
+| **Migrate session** | btrfs send data; CRIU only if kernel/CPU parity | Later |
+| **GPU agent work** | CUDA/ROCm + CRIU | Later; experimental |
+| **Desktop surface** | Full Wayland C/R hard; agent trees + TTY first | Deferred |
 
-Upstream usage scenarios that map cleanly: slow-boot speedup, app snapshots / incremental dumps, hung-app debugging, process duplication, HPC periodic save, (later) live migration. See [CRIU usage scenarios](https://criu.org/Usage_scenarios).
+Upstream CRIU scenarios that map cleanly: slow-boot speedup, app snapshots, hung-app debugging, process duplication, HPC periodic save, (later) live migration. See [CRIU usage scenarios](https://criu.org/Usage_scenarios).
 
-## Supervisor integration (product shape)
+## Supervisor + systemd integration
 
 | Concern | Direction |
 |---------|-----------|
-| Who calls CRIU | **Supervisor only** (not the agent dumping itself by default) |
-| What is dumped | Agent process tree under that agent’s uid; optional child tool processes it started |
-| Where images live | Per-agent store under ACL paths; human can list/delete; not world-readable |
-| Log | Every dump/restore is an action-log event (which agent, path, success/fail) |
-| Stop | Soft stop → dump then freeze/exit; hard kill still available |
-| Policy | Dump/restore of trees that hold secrets needs same confirm rules as high-risk acts when images leave the machine |
-| Failure | If CRIU cannot dump (unsupported fd, device, GPU), fall back to kill + structured “resume from last capability log”—honest degrade |
+| Who calls CRIU | **Supervisor / unit hooks only** (not the agent dumping itself by default) |
+| Unit model | One **systemd unit** (or equivalent) per agent: `User=`, sandbox, cgroup, restart |
+| What is dumped | Agent process tree under that unit’s uid; optional children it started |
+| Where images live | Per-agent btrfs subvol under ACL paths; snapshot-friendly; not world-readable |
+| Memories / data | Durable agent state lives on disk (subvol), not only in process heap; CRIU is additive |
+| Log | Every dump/restore/snapshot is an action-log event |
+| Stop | Soft: CRIU dump → optional unit stop; hard: kill unit still available |
+| Isolation | systemd features (PrivateTmp, ProtectSystem, capability bounding, etc.) + ACLs + CRIU/btrfs |
+| Failure | If CRIU cannot dump → kill unit + resume from capability log; btrfs data remains |
 
 ## What CRIU does **not** magically solve
 
 | Limit | Implication for us |
 |-------|---------------------|
 | Linux + kernel feature surface | Fits our Linux base; not Cosmopolitan-portable as the dump tool itself |
-| Kernel / CPU feature parity on restore | Migration and long-lived images need versioned base images and `cpuinfo` checks |
-| Not everything can be dumped | Some devices, exotic fds, some GPU paths fail—design agent trees to be dump-friendly |
-| Wayland / full DE C/R | Hard; do not bet v1 on “suspend whole desktop with CRIU” |
-| Security of image files | Checkpoint = memory + secrets snapshot; treat as sensitive as swap |
-| License | CRIU is GPLv2; packaging next to Apache/MIT code needs the usual separation discipline |
+| Kernel / CPU feature parity on restore | Migration needs versioned base + `cpuinfo` checks; btrfs data migrates more easily than CRIU images |
+| Not everything can be dumped | Design dump-friendly agent trees; rely on btrfs for durable truth |
+| Wayland / full DE C/R | Hard; do not bet v1 on whole-desktop CRIU |
+| Security of image files | CRIU image = memory/secrets; same care as swap; btrfs snaps of secrets dirs need same rules |
+| License | CRIU GPLv2; packaging separation discipline |
 
 ## Relation to multicall / Cosmopolitan base
 
-- **Ship `criu` on the installed system** (or a tightly versioned package)—it is a host tool, not an APE blob.  
-- Multicall core stays small; CRIU is an explicit **layer** or optional package for agent runtime.  
-- Cosmopolitan helpers are orthogonal (portable skills); checkpoint images are **host-bound**.  
-- Prefer agent trees that use ordinary files, pipes, and network sockets CRIU already handles well.
+- Ship `criu` and btrfs-progs on the installed system (host tools).  
+- Multicall core stays small; CRIU + btrfs are explicit **base layers** for agent runtime durability.  
+- Cosmopolitan helpers are orthogonal (portable skills); checkpoint images and subvols are **host-bound**.
+
+## Hardware and performance
+
+CRIU and btrfs are not a substitute for **real-hardware kernel and driver profiles**. Product proof stays on metal; QEMU is CI smoke. Kernel config / optional agent-oriented patches (if any ever earn their keep) are separate from snapshot strategy—see [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md).
 
 ## v1 vs later
 
-| v1 (stretch / strong optional) | Later |
-|--------------------------------|--------|
-| CRIU present on image; supervisor can dump/restore **one** simple agent tree on real hardware | Incremental series UI; cross-machine migrate |
-| Document dump-friendly agent layout (no mystery devices) | GPU agent checkpoint |
-| Fail soft with log if dump fails | Mode-switch auto-park; desktop session C/R |
-
-Full live migration and DE-wide suspend are **not** the v1 story. Agent freeze/resume and session snapshots **are** the product-shaped use of CRIU.
+| v1 | Later |
+|----|--------|
+| btrfs as default story for agent homes / workspaces where the image allows | Cross-machine migrate |
+| CRIU present; supervisor can dump/restore **one** simple agent tree (stretch) or fail-soft | Incremental CRIU series UI; GPU |
+| systemd (or compatible) unit per agent identity | Full DE C/R |
+| Combined “save session” may start as btrfs-only if CRIU not ready | Tight CRIU+snap orchestration |
 
 ## Pointers
 
 - https://criu.org/ · https://github.com/checkpoint-restore/criu  
-- Releases: e.g. 4.2 (late 2025) and ongoing kernel chase  
-- go-criu / P.Haul for programmatic control from a supervisor written in Go  
-- NVIDIA: CUDA checkpoint + CRIU for GPU processes (experimental coordination)
+- go-criu / P.Haul for programmatic control from a Go supervisor  
+- btrfs subvolumes, snapshots, send/receive  
+- systemd unit sandboxing / `User=` / cgroup isolation  
+- NVIDIA: CUDA checkpoint + CRIU (experimental)

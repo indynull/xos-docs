@@ -18,7 +18,8 @@ Someone who does real work tries the image for an afternoon (on real hardware wh
 - [ ] Real tasks as in [V1_SCOPE.md](./V1_SCOPE.md)  
 - [ ] Supervisor: status, stop, and action log for non-trivial steps  
 - [ ] (Stretch) CRIU dump/restore of one simple agent tree on real hardware, or honest fail-soft logged  
-- [ ] At least two agent identities with distinct users/ACLs  
+- [ ] Agent data/workspace paths durable; btrfs snapshots when the image uses btrfs  
+- [ ] At least two agent identities with distinct users/units/ACLs  
 - [ ] Create (or register) a capability and use it again  
 - [ ] Real Develop session  
 - [ ] Security notes match behavior  

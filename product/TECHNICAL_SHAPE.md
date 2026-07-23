@@ -2,20 +2,24 @@
 
 Parent: [../VISION.md](../VISION.md)
 
-Guesses only. Swap parts if the idea still holds. The spine below is intentional: **Wayland + modal shell**, **agent supervisor**, **per-agent Unix identity**, **radical small base**. Not “stock desktop + chat,” not “Ubuntu minus packages,” and not “QEMU demo distro.”
+Guesses only. Swap parts if the idea still holds. The spine below is intentional: **Wayland + modal shell**, **agent supervisor (systemd-class units)**, **per-agent Unix identity + ACLs**, **btrfs + CRIU durability**, **radical small base**, **real-hardware kernel profiles**. Not “stock desktop + chat,” not “Ubuntu minus packages,” and not “QEMU demo distro.”
+
+UX lineage (Archy / Enso inspiration): [../concepts/UX_LINEAGE.md](../concepts/UX_LINEAGE.md).
 
 ## Layers
 
 | Layer | Direction |
 |-------|-----------|
-| Kernel | Linux (v1). Own config and knobs that earn their keep—not a from-scratch kernel |
+| Kernel | Linux (v1). **Hardware-specific profiles** and knobs that earn their keep—not a from-scratch kernel; not QEMU-as-target |
+| Filesystem | **btrfs** default for agent homes, workspaces, capability store, CRIU image dirs (subvols + snapshots + send/receive) |
 | Core userspace | Prefer a **small multicall core** (BusyBox / toybox / custom multicall) over a full GNU userspace by default |
 | Portable tools | Cosmopolitan Libc / APE-style **actually portable** binaries where they help (agent helpers, bootstrap tools, cross-host skills)—not required for every process |
 | Limits | Process isolation; network/file limits; **per-agent Unix user + ACLs** |
-| Agent supervisor | Supervisord-style: lifecycle, restart policy, inter-agent channels, policy hooks (can itself be a small dedicated binary) |
-| Checkpoint / restore | **[CRIU](https://criu.org/)** on the host: freeze/restore agent process trees under supervisor control ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
-| Capability store | Versioned tools; local first |
-| Agents | One or more workers under the supervisor; each identity-scoped; reuse existing stacks if they fit |
+| Init / units | **systemd** (or compatible replacement that keeps unit isolation): one unit per agent, sandbox features, restart policy |
+| Agent supervisor | Orchestrates units + policy + channels; may be systemd itself plus thin policy layer, or a dedicated supervisor that *uses* units |
+| Checkpoint / restore | **CRIU** (process) + **btrfs snapshots** (data)—compose, do not pick one ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Capability store | Versioned tools; local first; lives on snapshotted subvols |
+| Agents | One or more workers; each **user account** + unit + memory/data paths; reuse existing stacks if they fit |
 | Shell | CLI + plain-language goal entry; modes; action log; editor/terminal surfaces |
 | Desktop | Wayland compositor; **modal** focus (mode + agent), multi-window allowed not default |
 | Web engine | Embed when needed—not the main UI |
@@ -26,12 +30,13 @@ Guesses only. Swap parts if the idea still holds. The spine below is intentional
 The default mental model is **not** “fork a consumer distro and install an agent.” Prefer:
 
 ```text
-Linux kernel
-  → small multicall core (BusyBox-class applets: mount, sh, networking basics, …)
-  → supervisor + agent runtime (isolated users/ACLs)
-  → CRIU (host tool): dump/restore agent trees
+Linux kernel (hardware profiles / measured opts)
+  → btrfs (subvols for agents, workspaces, images)
+  → small multicall core (BusyBox-class …)
+  → systemd-class units + supervisor (one unit / user per agent)
+  → CRIU (process freeze) + btrfs snapshots (data freeze)
   → shell (CLI + plain language) + Wayland modal surface
-  → capabilities / optional fuller tools pulled in as needed
+  → capabilities / optional fuller tools
 ```
 
 That is closer to **Talos / appliance multicall** thinking (kernel + one coherent userspace story) than to “ship half of Debian.” Edge *product* is still out of v1 ([../principles/NON_GOALS.md](../principles/NON_GOALS.md)); **multicall as the base strategy** is in scope.
@@ -62,6 +67,17 @@ Use Cosmopolitan where portability pays for itself. Do not force the compositor 
 
 Even with a tiny core, **speed of real work** matters: allocators, compiler/runtime choices, kernel config, hot-path patches. Multicall + portable tools are about **shape and surface**; optimizations are about **measured performance** on real hardware.
 
+### Hardware profiles (not QEMU-first)
+
+QEMU is CI smoke. Product and performance work target **real machines**. Expect **install profiles** (what packages/drivers/kernel options land) per class of hardware—same spirit as purpose-built arch images and custom kernels, not one generic guest kernel for everything.
+
+| Concern | Direction |
+|---------|-----------|
+| Drivers | Real hardware first; agent isolation does not remove the need for good drivers |
+| Kernel config | Per-profile (desktop, laptop, …); measure; keep diffs small |
+| “Agentic” kernel patches | Speculative; only if something as clear as audio’s `-rt` needs emerges. Unlikely early; do not block userspace design on them |
+| Personalization | Different machines and users may ship different layers; the *product shape* (goals, agents, modes) stays one |
+
 ## Desktop and shell
 
 - **Wayland** as the display path. No X11-first design.  
@@ -70,36 +86,38 @@ Even with a tiny core, **speed of real work** matters: allocators, compiler/runt
 - Surfaces (editor, terminal, files, embedded web) share project/mode context.  
 - Heavier tools (full browser, IDE-class editor) are **opt-in layers**, not the default rootfs bulk.
 
-## Agent supervisor
+## Agent supervisor + systemd
 
-Think **supervisord / init for agents**, not “spawn a chat process and hope.”
+Think **init/units for agents**, not “spawn a chat process and hope.”
+
+**systemd** (or a compatible replacement) is a practical fit: `User=`, cgroups, sandbox directives, restart policy, journal hooks. Isolation features already exist; use them so agents cannot touch what they should not. A thin **policy supervisor** can sit above units (goal routing, confirm UI, inter-agent channels) without reinventing service management.
 
 | Concern | Direction |
 |---------|-----------|
-| Lifecycle | Start, stop, restart, idle kill; explicit, inspectable |
-| Identity | Each agent runs as its own Unix user (or equivalent mapped identity) |
-| Rights | ACLs and capability grants per agent; human user is not the agent’s effective uid for work |
-| Intercommunicate | Named channels / IPC the supervisor allows; no free-for-all among agents |
-| Policy | Confirm hooks for high-risk steps; shared action log; stop always works |
-| Multi-agent | Multiple agents concurrent when useful; still one visible mode for the human |
+| Lifecycle | Unit start/stop/restart; idle park; explicit, inspectable |
+| Identity | Each agent: **own Unix user** + unit + home/memory subvol |
+| Rights | ACLs + systemd sandbox + capability grants; human is not the agent’s effective uid |
+| Memories / data | Durable paths on btrfs (not only process heap); concrete store per agent |
+| Intercommunicate | Named channels / IPC the supervisor allows; no free-for-all |
+| Policy | Confirm hooks; shared action log; stop always works |
+| Multi-agent | Multiple units concurrent; one visible work mode for the human |
 
-Which library implements the agent loop is an engineering choice. **Supervisor + identity + ACLs are product shape.**
+Which library implements the agent *loop* is an engineering choice. **Units + identity + ACLs + durable storage are product shape.**
 
-## Checkpointing (CRIU)
+## Checkpointing: CRIU + btrfs
 
-**CRIU** (Checkpoint/Restore In Userspace; often misspelled “ciru”) freezes a Linux process tree to image files and restores it later. It is the right primitive for agent lifecycle beyond kill/restart.
+Two layers, both in:
 
-| Use | How it attaches |
-|-----|-----------------|
-| Freeze / resume agent | Supervisor calls dump/restore on that agent’s tree |
-| Session snapshot | Named images + workspace path; revert or branch a run |
-| Warm start | Dump after runtime is loaded; next “start agent” restores warm |
-| Hung agent | Dump for offline debug; restart a clean worker |
-| Later | Incremental dumps, migrate to another box, GPU agents |
+| Tool | Role |
+|------|------|
+| **btrfs** | Subvols and snapshots for agent homes, workspaces, capability store, CRIU image dirs; seamless backups / send |
+| **CRIU** | Freeze/restore **running** agent process trees (warm state, mid-loop) |
 
-**Not v1 product goals:** full Wayland DE checkpoint, cross-kernel live migration as a feature pitch. **Yes as direction:** dump-friendly agent trees, supervisor-owned CRIU, ACL-scoped image store. Details: [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md).
+Compose: dump process → images on subvol → snapshot subvol. CRIU fail-soft still leaves btrfs truth. Details: [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md).
 
-CRIU is a **host** package (GPLv2), not a Cosmopolitan APE blob. Images are sensitive (memory/secrets)—same care as swap.
+**Not v1 product goals:** full Wayland DE CRIU, cross-kernel live migration as the pitch. **Yes:** btrfs as default durability story; optional CRIU dump of one simple agent tree; unit-per-agent.
+
+CRIU is a **host** package (GPLv2). Checkpoint images and secret-bearing snaps need swap-class care.
 
 ## Base system rules
 
@@ -117,8 +135,9 @@ CRIU is a **host** package (GPLv2), not a Cosmopolitan APE blob. Images are sens
 |-------|-----------------|--------|
 | Kernel | Linux | Own defconfig; optimize what we ship |
 | Core applets | BusyBox, toybox, custom multicall | Mount, net, basic utils |
-| Init / agent control | Dedicated supervisor binary | May double as pid 1 helper or run under a tiny init |
-| Checkpoint | CRIU (+ go-criu if supervisor is Go) | Agent trees first; not whole DE in v1 |
+| Init / agent control | systemd units + thin policy supervisor | One unit/user per agent; sandbox flags |
+| Filesystem | btrfs | Agent/workspace/image subvols + snapshots |
+| Checkpoint | CRIU (+ go-criu if needed) + btrfs snaps | Process + data; agent trees first |
 | Shell | Real shell + plain-language front | Same agent stack |
 | Desktop | Wayland compositor + modal shell UI | Windows optional |
 | Portable helpers | Cosmopolitan/APE builds | Capabilities, bootstrap, recovery |

@@ -15,13 +15,14 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Shell | CLI + plain-language goal entry; quiet UI; always show mode; at least Develop and Research |
 | Desktop | Wayland; modal focus (mode + agent); multi-window allowed, not default |
 | Context | Shared project/workspace across views |
-| Agent supervisor | Lifecycle control; start/stop; action log; at least two agent identities; **optional** CRIU dump/restore of one simple agent tree ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
-| Agents | Goal entry; read and act under ACLs; status, stop, log; dump-friendly process layout preferred |
-| Isolation | Per-agent Unix user + ACLs; no default “run as me” |
+| Agent supervisor | Units + policy: start/stop; action log; at least two agent identities; **optional** CRIU dump/restore of one simple agent tree ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Agents | Goal entry; read and act under ACLs; status, stop, log; durable data paths; dump-friendly layout preferred |
+| Isolation | Per-agent Unix user + unit sandbox + ACLs; no default “run as me” |
+| Durability | btrfs (or honest fallback) for agent/workspace paths; snapshots as the default backup story when available |
 | Capabilities | Small real set (below); one create-and-reuse path |
 | Develop | Real edit + terminal + agent session |
 | Security | Written rules match behavior ([SECURITY.md](./SECURITY.md)) |
-| Base | Multicall-leaning core (BusyBox-class or equivalent), not a mystery distro rootfs; optimizations and optional Cosmopolitan/APE helpers where they help ([TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md)) |
+| Base | Multicall-leaning core; hardware-aware profile path (not QEMU-as-product); optional Cosmopolitan/APE helpers ([TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md)) |
 
 ### Capability shapes (pick concrete targets later; keep the shape)
 
