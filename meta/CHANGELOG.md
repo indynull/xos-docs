@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-23 (GrokOS full planning roadmap)
+
+- Add [planning/GROKOS_FULL_ROADMAP.md](../planning/GROKOS_FULL_ROADMAP.md): master implementation roadmap (constitution, L1–L7 architecture, BOM, security, phases P0–P9, WBS, gates, risks).
+- Add architecture diagram [planning/grokos-architecture.svg](../planning/grokos-architecture.svg) and PNG export.
+- Wire planning into README as **implementation planning** (not product law); spine docs remain authoritative for v1 product decisions.
+
 ## 2026-07-23 (guided reading list + precis)
 
 - Add [context/READING.md](../context/READING.md): ordered tracks (HCI, systems, primaries) with precis, what each buys / does not buy, and xOS map for every bib key and major URL primary.

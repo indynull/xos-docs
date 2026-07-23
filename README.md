@@ -33,6 +33,7 @@ If a detail file disagrees with the brief or one-pager, fix the detail file **or
 | Exploration (candidates) | [product/TECHNICAL_SHAPE.md](./product/TECHNICAL_SHAPE.md) · [product/MODEL_STACK.md](./product/MODEL_STACK.md) · [product/HARDWARE_PROFILES.md](./product/HARDWARE_PROFILES.md) · [product/LINKERS_LOADERS.md](./product/LINKERS_LOADERS.md) · [concepts/CHECKPOINTING.md](./concepts/CHECKPOINTING.md) · [concepts/UX_LINEAGE.md](./concepts/UX_LINEAGE.md) *(optional)* |
 | Background | [context/PROBLEM.md](./context/PROBLEM.md) · [context/ALTERNATIVE_TRACKS.md](./context/ALTERNATIVE_TRACKS.md) · [context/READING.md](./context/READING.md) · [context/REFERENCES.md](./context/REFERENCES.md) · [context/NOVELTY.md](./context/NOVELTY.md) · [context/HCI.md](./context/HCI.md) |
 | Bibliography | [refs/xos-docs.bib](./refs/xos-docs.bib) (ookcite collection `xos-docs`) |
+| Planning (implementation roadmap) | [planning/GROKOS_FULL_ROADMAP.md](./planning/GROKOS_FULL_ROADMAP.md) · [architecture SVG](./planning/grokos-architecture.svg) / [PNG](./planning/grokos-architecture.png) — phased P0–P9 roadmap, WBS, risk register; **not product law** (see spine above) |
 | Process | [meta/HOW_TO_ITERATE.md](./meta/HOW_TO_ITERATE.md) · [meta/CHANGELOG.md](./meta/CHANGELOG.md) |
 
 **Status:** design notes only. Not implemented. Working name: xOS.
