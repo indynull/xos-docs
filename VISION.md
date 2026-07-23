@@ -24,7 +24,7 @@ goal  →  skill (capability)  →  result
 | **Agent supervisor** | Supervisord-style control: start/stop agents, wire how they talk, enforce policy. Not ad-hoc background jobs |
 | **Agent identity** | Each agent has its own Unix user and ACLs. Rights are granted, not inherited wholesale from the human |
 | **Desktop surface** | Wayland + modal UI: work mode and agent interaction at the center; many windows possible, not the default |
-| **Base system** | Thin, **optimized** Linux and toolchains (real performance work, not “minimal package list” as marketing). Real tools underneath (editor, terminal, browser engine) |
+| **Base system** | Linux + **small multicall core** (BusyBox-class), optional Cosmopolitan/APE portable tools, real toolchain/kernel optimizations. Not “Ubuntu minus packages.” Heavier tools are layers, not default bulk |
 | **Fallback** | Full browser or normal app when the short path does not fit |
 
 **Reuse:** the first time you connect a painful system costs effort and review. Later times should be a short goal, not the same UI maze.
@@ -49,7 +49,7 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 |-------------|--------|
 | Many windows and tabs | One clear mode; shared project context; windows optional |
 | Re-learning the same internal site | Saved capability; ask once next time |
-| Huge default install | Small, understandable, **fast** system |
+| Huge default install | Multicall core + explicit layers; **fast**, understandable system |
 | Agent as magic chat with your rights | Supervisor + per-agent users/ACLs; log and stop |
 | “Boots in QEMU” as the story | Real work on real hardware; measure the base |
 | Pretty distro as the story | Getting real work done |
@@ -72,7 +72,7 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 4. Save what you build  
 5. Security matters (log, stop, ask before dangerous steps)  
 6. Stay small and clear  
-7. Thin, solid, optimized Linux base  
+7. Thin multicall base (BusyBox-class), optimized; portable tools where they pay  
 8. Be honest about v1 scope  
 9. Agent actions must be visible  
 10. Work mode always shown  
@@ -102,6 +102,6 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 
 ## Team decision
 
-One product: goal-first desktop, capabilities, supervised OS agents (per-agent users/ACLs), Wayland modal shell, thin optimized Linux. Prove it before calling it an OS. Other ideas (stores, mobile, pure distro polish, QEMU demos as the product) stay separate.
+One product: goal-first desktop, capabilities, supervised OS agents (per-agent users/ACLs), Wayland modal shell, radical small base (multicall core + optional Cosmopolitan/APE tools + optimizations). Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos as the product) stay separate.
 
 → [product/DECISION.md](./product/DECISION.md)

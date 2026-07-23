@@ -21,7 +21,7 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Capabilities | Small real set (below); one create-and-reuse path |
 | Develop | Real edit + terminal + agent session |
 | Security | Written rules match behavior ([SECURITY.md](./SECURITY.md)) |
-| Base | Thin optimized Linux; remove clutter; meaningful base work over stock ([TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md)) |
+| Base | Multicall-leaning core (BusyBox-class or equivalent), not a mystery distro rootfs; optimizations and optional Cosmopolitan/APE helpers where they help ([TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md)) |
 
 ### Capability shapes (pick concrete targets later; keep the shape)
 
@@ -35,7 +35,7 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 
 ## Out of v1
 
-Full industry workflows · multi-arch program · app store · theming as a feature · every website · new kernel from scratch · mobile/edge as main target · QEMU as product proof · single privileged agent with human rights · window-manager-first UX.
+Full industry workflows · multi-arch program · app store · theming as a feature · every website · new kernel from scratch · mobile/edge as main *product* · QEMU as product proof · single privileged agent with human rights · window-manager-first UX · Cosmopolitan as the whole desktop · busybox-only image with no goal/agent path.
 
 ## Time
 

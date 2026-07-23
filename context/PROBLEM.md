@@ -15,7 +15,8 @@ Computers push hard work through apps and habits. You glue the tools together. C
 5. **Split tools** — editor, terminal, files, browser feel unrelated.  
 6. **Agents on top** — no saved skills, no desktop that follows the task.  
 7. **Agent as the user** — one chat process with full rights, no supervisor, no ACLs.  
-8. **Demo as product** — QEMU boots and theme screenshots instead of real work on real machines.
+8. **Demo as product** — QEMU boots and theme screenshots instead of real work on real machines.  
+9. **Distro cargo cult** — start from a full consumer userspace and delete packages, instead of composing up from a small multicall core and explicit layers.
 
 ## Better
 

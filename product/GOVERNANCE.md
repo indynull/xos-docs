@@ -15,7 +15,7 @@ A small group owns: what is in/out of the idea, v1 cuts, core vs other project. 
 | Role | Owns |
 |------|------|
 | Product | Brief, one-pager, modes, capabilities UX, non-goals, v1 bar |
-| Base system | Thin optimized Linux, images, package cuts, toolchain/kernel knobs that earn keep |
+| Base system | Multicall core, images, layers, Cosmopolitan/APE helpers where useful, toolchain/kernel knobs that earn keep |
 | Shell / desktop | Wayland modal UI, CLI + plain-language goal entry |
 | Agent runtime | Supervisor, lifecycle, inter-agent channels, tool loop |
 | Security | Policy, per-agent users/ACLs, capability classes |

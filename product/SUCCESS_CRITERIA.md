@@ -26,4 +26,4 @@ Someone who does real work tries the image for an afternoon (on real hardware wh
 
 ## Hard fails
 
-Chat on stock desktop as the product · only toys · someone secretly driving the agent · risky actions with no confirm · agent effectively running as the human by default · success measured by themes, package count, or QEMU boot alone.
+Chat on stock desktop as the product · only toys · someone secretly driving the agent · risky actions with no confirm · agent effectively running as the human by default · success measured by themes, package count, or QEMU boot alone · “we deleted packages from Ubuntu” with no multicall/composable story · busybox-only with no real goal path.

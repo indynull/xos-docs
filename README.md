@@ -6,7 +6,7 @@ Design notes for a Linux desktop that starts from **what you want to do**, not f
 goal  →  capability  →  result   (in a work mode)
 ```
 
-**Spine (product shape):** Wayland + modal shell (CLI + plain language) · supervised agents with per-agent users/ACLs · thin optimized Linux. QEMU is CI smoke, not the story.
+**Spine (product shape):** Wayland + modal shell (CLI + plain language) · supervised agents with per-agent users/ACLs · radical small base (BusyBox-class multicall + optional Cosmopolitan/APE tools + optimizations). QEMU is CI smoke, not the story.
 
 ---
 

@@ -10,13 +10,15 @@ Things we are **not** trying to be. Saying no keeps the project clear.
 | App store as the main product | Different product; maybe later on top |
 | Chat box on a normal desktop as the end state | Leaves the old workflow intact |
 | Toy demos as the identity | Real work is the bar |
-| Huge default install | We cut junk |
+| Huge default install | Multicall core + layers; we do not ship “everything just in case” |
+| Consumer distro minus packages as the architecture | Prefer building up from a small core (BusyBox-class / similar), not deleting our way to thin |
 | Full multi-arch distro as v1 | Too large for the first proof |
 | New kernel from scratch (v1) | Use Linux; own the desktop/agent layer; optimize what we ship |
+| Cosmopolitan as the whole desktop | APE/portable blobs for tools and capabilities—not a second interactive stack |
 | Browser as the main product | Engine is fine; browse-first is not |
 | Apps as the only way to work | Goals and capabilities come first |
 | Endless UI customization | Defaults should be strong; modal focus over window soup |
-| Mobile or edge as v1 | Different projects |
+| Mobile or edge *product* as v1 | Different product; multicall base technique may still be shared |
 | Big committee process | Small group; ship |
 | QEMU-first as product narrative | CI smoke is fine; proof is real tasks / real hardware |
 | Single agent with the user’s full rights | Supervisor + per-agent users/ACLs |
