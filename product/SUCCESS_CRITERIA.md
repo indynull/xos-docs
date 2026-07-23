@@ -4,18 +4,20 @@ Parent: [../VISION.md](../VISION.md) · See: [V1_SCOPE.md](./V1_SCOPE.md)
 
 ## Pass / fail
 
-Someone who does real work tries the image for an afternoon and can say:
+Someone who does real work tries the image for an afternoon (on real hardware when possible) and can say:
 
-> I barely needed a normal browser or app menu. The mode matched what I was doing. I can see this growing into how I work.
+> I barely needed a normal browser or app menu. The mode matched what I was doing. Agents felt supervised and limited, not like my whole account on autopilot. I can see this growing into how I work.
 
-**Fail:** pretty Linux + chat on a normal desktop, or only gimmick demos.
+**Fail:** pretty Linux + chat on a normal desktop · only gimmick demos · “it boots in QEMU” with no real-work path.
 
 ## Checklist
 
-- [ ] Boots in QEMU  
-- [ ] Mode always visible  
+- [ ] Boots and runs real tasks (prefer real hardware; QEMU OK only as CI smoke)  
+- [ ] Wayland modal shell; mode always visible  
+- [ ] Plain-language goal path and normal CLI both work  
 - [ ] Real tasks as in [V1_SCOPE.md](./V1_SCOPE.md)  
-- [ ] Status, stop, and action log for non-trivial steps  
+- [ ] Supervisor: status, stop, and action log for non-trivial steps  
+- [ ] At least two agent identities with distinct users/ACLs  
 - [ ] Create (or register) a capability and use it again  
 - [ ] Real Develop session  
 - [ ] Security notes match behavior  
@@ -24,4 +26,4 @@ Someone who does real work tries the image for an afternoon and can say:
 
 ## Hard fails
 
-Chat on stock desktop as the product · only toys · someone secretly driving the agent · risky actions with no confirm · success measured by themes or package count.
+Chat on stock desktop as the product · only toys · someone secretly driving the agent · risky actions with no confirm · agent effectively running as the human by default · success measured by themes, package count, or QEMU boot alone.

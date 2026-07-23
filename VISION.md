@@ -19,11 +19,17 @@ goal  →  skill (capability)  →  result
 | **Goal** | What you want done—not which app to open |
 | **Capability** | A saved, reusable way to talk to a system (API, tool, repo, file format, site). MCP-style tools are fine |
 | **Work mode** | The desktop focuses on one kind of work at a time. You always see which mode you are in |
-| **Agent** | Built into the OS: look things up, take actions, and help create new capabilities when missing |
-| **Base system** | Thin Linux. Real tools underneath (editor, terminal, browser engine). Cut unused packages |
+| **Shell** | Normal CLI plus plain-language goals into the agent stack; not a separate product bolted on later |
+| **Agent** | Built into the OS: look things up, take actions, and help create new capabilities when missing. Not one privileged chat process |
+| **Agent supervisor** | Supervisord-style control: start/stop agents, wire how they talk, enforce policy. Not ad-hoc background jobs |
+| **Agent identity** | Each agent has its own Unix user and ACLs. Rights are granted, not inherited wholesale from the human |
+| **Desktop surface** | Wayland + modal UI: work mode and agent interaction at the center; many windows possible, not the default |
+| **Base system** | Thin, **optimized** Linux and toolchains (real performance work, not “minimal package list” as marketing). Real tools underneath (editor, terminal, browser engine) |
 | **Fallback** | Full browser or normal app when the short path does not fit |
 
 **Reuse:** the first time you connect a painful system costs effort and review. Later times should be a short goal, not the same UI maze.
+
+**Proof target:** real machines and real workloads. QEMU is a CI convenience at most—not the product goal and not a substitute for optimization.
 
 ---
 
@@ -41,17 +47,18 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 
 | Bad default | Better |
 |-------------|--------|
-| Many windows and tabs | One clear mode; shared project context |
+| Many windows and tabs | One clear mode; shared project context; windows optional |
 | Re-learning the same internal site | Saved capability; ask once next time |
-| Huge default install | Small, understandable system |
-| Agent as magic chat | Agent with tools, log, and stop |
+| Huge default install | Small, understandable, **fast** system |
+| Agent as magic chat with your rights | Supervisor + per-agent users/ACLs; log and stop |
+| “Boots in QEMU” as the story | Real work on real hardware; measure the base |
 | Pretty distro as the story | Getting real work done |
 
 ---
 
 ## Not goals
 
-Wallpaper/theme culture as the product · app store as the core · “AI on a normal desktop” as the end state · toy demos as the identity · multi-arch distro project as v1 · agent with silent root power · shipping default junk “just in case.”
+Wallpaper/theme culture as the product · app store as the core · “AI on a normal desktop” as the end state · toy demos as the identity · multi-arch distro project as v1 · agent with silent root power · shipping default junk “just in case” · QEMU-first as the product narrative · one shared agent process with the user’s full rights.
 
 Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 
@@ -65,10 +72,12 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 4. Save what you build  
 5. Security matters (log, stop, ask before dangerous steps)  
 6. Stay small and clear  
-7. Thin, solid Linux base  
+7. Thin, solid, optimized Linux base  
 8. Be honest about v1 scope  
 9. Agent actions must be visible  
 10. Work mode always shown  
+11. Agents are supervised and isolated (own user + ACLs)  
+12. Shell is native (CLI + plain language), not an afterthought  
 
 → [principles/PRINCIPLES.md](./principles/PRINCIPLES.md)
 
@@ -78,13 +87,14 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 
 Show the idea works on **real tasks**, not toys.
 
-Bootable image (QEMU first): goal → agent → capability → mode for a few paths, including:
+Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal): Wayland modal shell, goal → supervised agent → capability → mode, for a few paths, including:
 
-- real develop session (edit + terminal + agent)  
+- real develop session (edit + terminal + agent; plain-language shell path works)  
 - real investigation or write-up with sources  
 - create one non-trivial capability and use it again  
+- at least two agents under the supervisor with distinct users/ACLs  
 
-**Fail if:** pretty ISO + chat on a normal desktop, or only gimmick demos.
+**Fail if:** pretty ISO + chat on a normal desktop, only gimmick demos, or “it boots in QEMU” with no real-work path.
 
 → [product/V1_SCOPE.md](./product/V1_SCOPE.md) · [product/SUCCESS_CRITERIA.md](./product/SUCCESS_CRITERIA.md)
 
@@ -92,6 +102,6 @@ Bootable image (QEMU first): goal → agent → capability → mode for a few pa
 
 ## Team decision
 
-One product: goal-first desktop, capabilities, OS agent, thin Linux. Prove it before calling it an OS. Other ideas (stores, mobile, pure distro polish) stay separate.
+One product: goal-first desktop, capabilities, supervised OS agents (per-agent users/ACLs), Wayland modal shell, thin optimized Linux. Prove it before calling it an OS. Other ideas (stores, mobile, pure distro polish, QEMU demos as the product) stay separate.
 
 → [product/DECISION.md](./product/DECISION.md)

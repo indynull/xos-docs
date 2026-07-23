@@ -13,7 +13,9 @@ Computers push hard work through apps and habits. You glue the tools together. C
 3. **Decoration as product** — attention spent on looks.  
 4. **Too much default software** — packages and services you did not ask for.  
 5. **Split tools** — editor, terminal, files, browser feel unrelated.  
-6. **Agents on top** — no saved skills, no desktop that follows the task.
+6. **Agents on top** — no saved skills, no desktop that follows the task.  
+7. **Agent as the user** — one chat process with full rights, no supervisor, no ACLs.  
+8. **Demo as product** — QEMU boots and theme screenshots instead of real work on real machines.
 
 ## Better
 

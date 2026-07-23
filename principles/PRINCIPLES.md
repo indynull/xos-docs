@@ -12,9 +12,13 @@ If we break one of these, write down why.
 | 4 | Save skills | When we wire something new, keep it for next time. |
 | 5 | Security matters | Agent is powerful: tight permissions, log, stop, ask before dangerous steps. |
 | 6 | Stay small | Ship a clear product, not every package. |
-| 7 | Thin base | Drop distro junk. Keep a solid, small Linux core. |
-| 8 | Honest v1 | Success is showing the idea on real work—not a full distro program. |
-| 9 | Visible agent | Show status, allow stop, keep a trail. |
+| 7 | Thin optimized base | Drop distro junk. Keep a solid, small, **fast** Linux core; measure real work. |
+| 8 | Honest v1 | Success is showing the idea on real work—not a full distro program or a QEMU demo. |
+| 9 | Visible agent | Show status, allow stop, keep a trail; name the agent identity. |
 | 10 | Clear mode | Always show which work mode is active. |
+| 11 | Supervised agents | Lifecycle and inter-agent channels go through a supervisor. |
+| 12 | Isolated agents | Each agent has its own user and ACLs; not the human’s full rights by default. |
+| 13 | Native shell | CLI and plain-language goals share one stack; shell is not an afterthought. |
+| 14 | Modal desktop | Wayland + mode-centered UI; many windows possible, not the default. |
 
-More: [../concepts/](../concepts/) · [../product/SECURITY.md](../product/SECURITY.md) · [../product/V1_SCOPE.md](../product/V1_SCOPE.md)
+More: [../concepts/](../concepts/) · [../product/SECURITY.md](../product/SECURITY.md) · [../product/V1_SCOPE.md](../product/V1_SCOPE.md) · [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md)

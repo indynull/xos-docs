@@ -4,21 +4,24 @@ Parent: [../VISION.md](../VISION.md) · See: [SUCCESS_CRITERIA.md](./SUCCESS_CRI
 
 ## Goal
 
-Show the idea works on a few **real** tasks. Not a full workplace product. Not toy-only demos.
+Show the idea works on a few **real** tasks. Not a full workplace product. Not toy-only demos. Not “boots in QEMU” as the story.
 
-**Deliverable:** bootable image (QEMU first) where the normal path is goal → agent → capability → work mode.
+**Deliverable:** bootable image (prefer real hardware for demos; QEMU OK for CI) where the normal path is goal → **supervised** agent → capability → work mode, on a Wayland modal shell.
 
 ## In scope
 
 | Area | Need |
 |------|------|
-| Shell | Quiet UI; always show mode; at least Develop and Research |
+| Shell | CLI + plain-language goal entry; quiet UI; always show mode; at least Develop and Research |
+| Desktop | Wayland; modal focus (mode + agent); multi-window allowed, not default |
 | Context | Shared project/workspace across views |
-| Agent | Goal entry; read and act; status, stop, log |
+| Agent supervisor | Lifecycle control; start/stop; action log; at least two agent identities |
+| Agents | Goal entry; read and act under ACLs; status, stop, log |
+| Isolation | Per-agent Unix user + ACLs; no default “run as me” |
 | Capabilities | Small real set (below); one create-and-reuse path |
 | Develop | Real edit + terminal + agent session |
-| Security | Written rules; limited tools ([SECURITY.md](./SECURITY.md)) |
-| Base | Thin Linux; remove clutter ([TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md)) |
+| Security | Written rules match behavior ([SECURITY.md](./SECURITY.md)) |
+| Base | Thin optimized Linux; remove clutter; meaningful base work over stock ([TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md)) |
 
 ### Capability shapes (pick concrete targets later; keep the shape)
 
@@ -32,7 +35,7 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 
 ## Out of v1
 
-Full industry workflows · multi-arch program · app store · theming as a feature · every website · new kernel · mobile/edge as main target.
+Full industry workflows · multi-arch program · app store · theming as a feature · every website · new kernel from scratch · mobile/edge as main target · QEMU as product proof · single privileged agent with human rights · window-manager-first UX.
 
 ## Time
 
