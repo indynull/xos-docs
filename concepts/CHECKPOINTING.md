@@ -4,6 +4,23 @@ Parent: [../VISION.md](../VISION.md) · See: [AGENTS.md](./AGENTS.md) · [../pro
 
 **Name note:** often typed “ciru”; the project is **[CRIU](https://criu.org/)** — Checkpoint/Restore In Userspace (pronounced *kree-oo*). GPLv2 utility; freeze a process tree, write images to disk, restore later. Mostly userspace + kernel features (`ptrace`, namespaces, TCP repair, lazy pages, etc.). Ecosystem includes [go-criu](https://github.com/checkpoint-restore/go-criu), Podman/Docker/K8s hooks, experimental GPU paths (`cuda-checkpoint` / CRIUgpu).
 
+## First-class OS capability (not a bolt-on)
+
+CRIU is a **baked-in platform capability**: shipped on the image, wired into the supervisor, documented as a skill agents and humans can rely on—not “maybe install criu later.”
+
+Agent restore in the wild is often **hit-or-miss** (unsupported fds, library drift, GPU, hand-wavy dumps). xOS treats that as a product defect to close, not an expected UX:
+
+| Guarantee | Direction |
+|-----------|-----------|
+| **Default agent layout is dump-friendly** | Ordinary files, pipes, sockets; no mystery devices on the happy path |
+| **Supervisor owns dump/restore** | One code path; tested; logged |
+| **Stack pin under the agent** | Same libs/tools revision at dump and restore ([../product/BUILD_DEPLOY.md](../product/BUILD_DEPLOY.md)) |
+| **Hardware profile known** | Kernel features CRIU needs are on for that profile ([../product/HARDWARE_PROFILES.md](../product/HARDWARE_PROFILES.md)) |
+| **Honest degrade** | If dump fails: structured error + btrfs durability + resume-from-log—not silent corruption |
+| **CI + metal** | Restore tests on real hardware for the primary profile; QEMU optional extra |
+
+“First-class” means the **happy path is reliable**, not that every exotic tree must dump.
+
 ## Does CRIU fit with btrfs + systemd + ACLs?
 
 **Yes — at a different layer.** They compose; they do not replace each other.
@@ -100,16 +117,18 @@ Upstream CRIU scenarios that map cleanly: slow-boot speedup, app snapshots, hung
 
 ## Hardware and performance
 
-CRIU and btrfs are not a substitute for **real-hardware kernel and driver profiles**. Product proof stays on metal; QEMU is CI smoke. Kernel config / optional agent-oriented patches (if any ever earn their keep) are separate from snapshot strategy—see [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md).
+CRIU and btrfs are not a substitute for **real-hardware kernel and driver profiles**. Product proof stays on metal; QEMU is CI smoke. See [../product/HARDWARE_PROFILES.md](../product/HARDWARE_PROFILES.md). Restores also need a **pinned userspace stack** ([../product/BUILD_DEPLOY.md](../product/BUILD_DEPLOY.md)).
 
 ## v1 vs later
 
-| v1 | Later |
-|----|--------|
-| btrfs as default story for agent homes / workspaces where the image allows | Cross-machine migrate |
-| CRIU present; supervisor can dump/restore **one** simple agent tree (stretch) or fail-soft | Incremental CRIU series UI; GPU |
-| systemd (or compatible) unit per agent identity | Full DE C/R |
-| Combined “save session” may start as btrfs-only if CRIU not ready | Tight CRIU+snap orchestration |
+| v1 (first-class bar) | Later |
+|----------------------|--------|
+| CRIU **on the image**; supervisor dump/restore of the **canonical agent tree** | Cross-machine migrate |
+| Automated test: dump → restore → agent continues a known task (real hardware, primary profile) | Incremental series UI; GPU |
+| btrfs default for agent homes / workspaces when the image allows | Full DE C/R |
+| systemd (or compatible) unit per agent identity | Multi-site image ferry |
+| Stack revision pinned so restore is not random distro libs | Full EESSI multi-site ops |
+| Fail-soft only after a real dump attempt; never pretend success | Tight CRIU+snap orchestration UI |
 
 ## Pointers
 

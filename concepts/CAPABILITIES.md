@@ -18,6 +18,18 @@ goal → do we have a capability?
 
 Connecting **real work systems** under clear permissions. Tiny demos can show the pattern; they are not the goal list.
 
+## Platform capabilities (OS-provided)
+
+Some capabilities are **built into the OS**, not only user-wired:
+
+| Platform capability | Role |
+|---------------------|------|
+| **CRIU checkpoint/restore** | First-class; supervisor-mediated freeze/resume of agent trees ([CHECKPOINTING.md](./CHECKPOINTING.md)) |
+| **btrfs snapshot / send** | Durable agent/workspace points |
+| **Pinned software stack** | Develop and agent tools from a revisioned stack ([../product/BUILD_DEPLOY.md](../product/BUILD_DEPLOY.md)) |
+
+User-built capabilities should **declare** stack and permission needs so restore and reuse stay reliable.
+
 ## How work should feel
 
 | Kind of work | Preferred path |

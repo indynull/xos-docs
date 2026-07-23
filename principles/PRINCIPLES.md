@@ -22,5 +22,7 @@ If we break one of these, write down why.
 | 14 | Modal desktop | Wayland + mode-centered UI; many windows possible, not the default. |
 | 15 | Durable agent state | btrfs (or equal) for memories/workspaces; snapshots under agent traffic. |
 | 16 | Hardware-aware base | Real profiles and measurement; QEMU is CI, not the product. |
+| 17 | First-class CRIU | On-image; supervisor path; tested dump→restore—not hit-or-miss. |
+| 18 | Pinned software stack | EESSI-class guarantees; same revision for image, CI, and agents. |
 
 More: [../concepts/](../concepts/) · [../product/SECURITY.md](../product/SECURITY.md) · [../product/V1_SCOPE.md](../product/V1_SCOPE.md) · [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md)

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-23 (profiles, first-class CRIU, EESSI-class stack)
+
+- **Hardware profiles:** drivers/performance; [linux-rg](https://github.com/HaoZeke/linux-rg) and [hzArchiso](https://github.com/HaoZeke/hzArchiso) as profile *discipline* examples; userspace-preferring drivers; agentic `-rt`-like patches speculative ([product/HARDWARE_PROFILES.md](../product/HARDWARE_PROFILES.md)).
+- **CRIU first-class:** on-image platform capability; tested dump→restore; hit-or-miss restores treated as product defect.
+- **Build/deploy:** EESSI-class guarantees (pinned optimized stack, CI = desk) ([product/BUILD_DEPLOY.md](../product/BUILD_DEPLOY.md)).
+- Raised v1/success criteria; updated brief, vision, capabilities, principles, decision, governance, alternative tracks, README.
+
 ## 2026-07-23 (team thread — systemd, btrfs, Archy/Enso, hardware)
 
 - **Archy / Enso** as UX lineage (command nucleus, persistence)—not clones ([concepts/UX_LINEAGE.md](../concepts/UX_LINEAGE.md)).

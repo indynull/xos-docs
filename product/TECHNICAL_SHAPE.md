@@ -17,7 +17,8 @@ UX lineage (Archy / Enso inspiration): [../concepts/UX_LINEAGE.md](../concepts/U
 | Limits | Process isolation; network/file limits; **per-agent Unix user + ACLs** |
 | Init / units | **systemd** (or compatible replacement that keeps unit isolation): one unit per agent, sandbox features, restart policy |
 | Agent supervisor | Orchestrates units + policy + channels; may be systemd itself plus thin policy layer, or a dedicated supervisor that *uses* units |
-| Checkpoint / restore | **CRIU** (process) + **btrfs snapshots** (data)—compose, do not pick one ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Checkpoint / restore | **CRIU first-class** (process) + **btrfs** snapshots (data)—compose ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Software stack | EESSI-class **pinned optimized** tools for Develop/agents/CI ([BUILD_DEPLOY.md](./BUILD_DEPLOY.md)) |
 | Capability store | Versioned tools; local first; lives on snapshotted subvols |
 | Agents | One or more workers; each **user account** + unit + memory/data paths; reuse existing stacks if they fit |
 | Shell | CLI + plain-language goal entry; modes; action log; editor/terminal surfaces |
@@ -33,8 +34,9 @@ The default mental model is **not** “fork a consumer distro and install an age
 Linux kernel (hardware profiles / measured opts)
   → btrfs (subvols for agents, workspaces, images)
   → small multicall core (BusyBox-class …)
+  → pinned software stack (EESSI-class revision)
   → systemd-class units + supervisor (one unit / user per agent)
-  → CRIU (process freeze) + btrfs snapshots (data freeze)
+  → CRIU first-class (process freeze) + btrfs snapshots (data freeze)
   → shell (CLI + plain language) + Wayland modal surface
   → capabilities / optional fuller tools
 ```
@@ -69,14 +71,24 @@ Even with a tiny core, **speed of real work** matters: allocators, compiler/runt
 
 ### Hardware profiles (not QEMU-first)
 
-QEMU is CI smoke. Product and performance work target **real machines**. Expect **install profiles** (what packages/drivers/kernel options land) per class of hardware—same spirit as purpose-built arch images and custom kernels, not one generic guest kernel for everything.
+QEMU is CI smoke. Product and performance work target **real machines**. Full write-up: [HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md).
+
+**Shape of prior art (examples, not hard deps):**
+
+- [linux-rg](https://github.com/HaoZeke/linux-rg) — multi-profile kernel: shared base + per-machine overlays, documented targets, patches tracked per profile.  
+- [hzArchiso](https://github.com/HaoZeke/hzArchiso) — install/image where package and driver set is intentional (what lands and why).
 
 | Concern | Direction |
 |---------|-----------|
-| Drivers | Real hardware first; agent isolation does not remove the need for good drivers |
-| Kernel config | Per-profile (desktop, laptop, …); measure; keep diffs small |
-| “Agentic” kernel patches | Speculative; only if something as clear as audio’s `-rt` needs emerges. Unlikely early; do not block userspace design on them |
-| Personalization | Different machines and users may ship different layers; the *product shape* (goals, agents, modes) stays one |
+| Drivers | Real hardware first; prefer userspace / least privilege when third-party code is risky |
+| Kernel config | Per-profile overlays; measure; keep diffs small |
+| “Agentic” kernel patches | Speculative (audio `-rt` analogy). Unlikely early; do not block userspace |
+| Personalization | Different machines/users → different layers; product shape stays one |
+| Install set | Profile-driven; not one giant generic rootfs |
+
+### Build / deploy stack (EESSI-class guarantees)
+
+Agents and CRIU restores need a **pinned, optimized, multi-host** software stack—same spirit as [EESSI](https://www.eessi.io/). Hit-or-miss restores are often library and path drift, not only CRIU. Full write-up: [BUILD_DEPLOY.md](./BUILD_DEPLOY.md).
 
 ## Desktop and shell
 
@@ -115,7 +127,7 @@ Two layers, both in:
 
 Compose: dump process → images on subvol → snapshot subvol. CRIU fail-soft still leaves btrfs truth. Details: [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md).
 
-**Not v1 product goals:** full Wayland DE CRIU, cross-kernel live migration as the pitch. **Yes:** btrfs as default durability story; optional CRIU dump of one simple agent tree; unit-per-agent.
+**Not v1 product goals:** full Wayland DE CRIU, cross-kernel live migration as the pitch. **Yes:** btrfs default durability; **first-class CRIU** on the image with supervisor dump/restore of the canonical agent tree + tested restore path; unit-per-agent.
 
 CRIU is a **host** package (GPLv2). Checkpoint images and secret-bearing snaps need swap-class care.
 
@@ -133,16 +145,17 @@ CRIU is a **host** package (GPLv2). Checkpoint images and secret-bearing snaps n
 
 | Piece | Example options | Notes |
 |-------|-----------------|--------|
-| Kernel | Linux | Own defconfig; optimize what we ship |
+| Kernel | Linux + machine profile overlays | e.g. linux-rg-style discipline |
 | Core applets | BusyBox, toybox, custom multicall | Mount, net, basic utils |
 | Init / agent control | systemd units + thin policy supervisor | One unit/user per agent; sandbox flags |
 | Filesystem | btrfs | Agent/workspace/image subvols + snapshots |
-| Checkpoint | CRIU (+ go-criu if needed) + btrfs snaps | Process + data; agent trees first |
+| Checkpoint | CRIU first-class + btrfs snaps | Process + data; tested restore |
+| Software stack | EESSI / EESSI-like / pinned modules | Same on desk and CI |
 | Shell | Real shell + plain-language front | Same agent stack |
 | Desktop | Wayland compositor + modal shell UI | Windows optional |
 | Portable helpers | Cosmopolitan/APE builds | Capabilities, bootstrap, recovery |
-| Heavy tools | Separate install/layer | Editor, browser engine, compilers as needed |
+| Heavy tools | Stack layer or image layer | Editor, browser engine, compilers |
 
 ## v1 image
 
-x86_64 first. Prefer install/boot on real hardware for demos. CI may use QEMU. Image should be **explainable**: small core + agent stack + enough for the v1 real-work paths—not a mystery distro rootfs. More architectures later (not v1 program). Cosmopolitan portability of helpers is a plus in v1 if it unblocks a real capability path; it is not a checkbox.
+x86_64 first. Prefer install/boot on **one documented real-machine profile**. CI may use QEMU for smoke only. Image should be **explainable**: small core + CRIU + agent stack + **pinned software stack revision** + enough for the v1 real-work paths. More architectures later (not v1 program).
