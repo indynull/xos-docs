@@ -17,16 +17,16 @@ Someone who does real work tries the image for an afternoon (on real hardware wh
 - [ ] Plain-language goal path and normal CLI both work  
 - [ ] Real tasks as in [V1_SCOPE.md](./V1_SCOPE.md)  
 - [ ] Supervisor: status, stop, and action log for non-trivial steps  
-- [ ] **CRIU first-class:** dump → restore → agent continues a known task (primary profile); fail-soft only after real attempt  
+- [ ] **CRIU first-class on our kernel:** dump → restore → agent continues a known task (primary profile); fail-soft only after real attempt  
 - [ ] Agent data/workspace paths durable; btrfs snapshots when the image uses btrfs  
-- [ ] Image and CI share a **pinned software stack** revision (EESSI-class guarantee)  
+- [ ] Documented **linker/loader/libc policy** for the canonical agent tree  
 - [ ] At least two agent identities with distinct users/units/ACLs  
 - [ ] Create (or register) a capability and use it again  
-- [ ] Real Develop session on that stack  
+- [ ] Real Develop session  
 - [ ] Security notes match behavior  
 - [ ] Demo needs no “ignore the rest of the desktop” disclaimer  
 - [ ] People do not leave thinking this is toy lookups on Linux  
 
 ## Hard fails
 
-Chat on stock desktop as the product · only toys · someone secretly driving the agent · risky actions with no confirm · agent effectively running as the human by default · success measured by themes, package count, or QEMU boot alone · “we deleted packages from Ubuntu” with no multicall/composable story · busybox-only with no real goal path · CRIU missing or only “works sometimes” with no test · CI tools unrelated to the image stack.
+Chat on stock desktop as the product · only toys · someone secretly driving the agent · risky actions with no confirm · agent effectively running as the human by default · success measured by themes, package count, or QEMU boot alone · “we deleted packages from Ubuntu” with no multicall/composable story · busybox-only with no real goal path · CRIU missing, bolted on a random kernel, or only “works sometimes” with no test.

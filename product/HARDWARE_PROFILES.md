@@ -1,6 +1,6 @@
 # Hardware profiles and performance
 
-Parent: [../VISION.md](../VISION.md) · See: [TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md) · [BUILD_DEPLOY.md](./BUILD_DEPLOY.md)
+Parent: [../VISION.md](../VISION.md) · See: [TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md) · [LINKERS_LOADERS.md](./LINKERS_LOADERS.md)
 
 ## Problem
 
@@ -44,7 +44,8 @@ xOS may use different packaging (not necessarily Arch). The rule is the same: **
 | Prefer userspace / least privilege where safe | Third-party code in the kernel is a long-term liability (printer-class lessons on other OSes); keep dangerous blobs out of kernel when alternatives exist |
 | Firmware inventory | Profiles list required firmware; fail closed with a clear message when missing |
 | GPU / media | Profile-specific; agent GPU CRIU is later and must not break base laptop/desktop profiles |
-| “Agentic” kernel patches | Speculative—only if something as clear as audio’s `-rt` stack emerges. **Unlikely early.** Do not block userspace (agents, CRIU, shell) on a fantasy patch set |
+| “Agentic” kernel patches | Speculative—only if something as clear as audio’s `-rt` stack emerges. **Unlikely early** for generic agent UX. **CRIU integration is different:** C/R is first-class and should be designed **with the kernel we ship** (config, required features, deep integration)—not a random userspace package on an arbitrary kernel |
+| CRIU + kernel | Primary profiles enable and validate the kernel surface CRIU needs; treat breakages as base bugs |
 
 ## Performance
 

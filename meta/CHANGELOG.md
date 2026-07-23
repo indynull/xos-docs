@@ -1,11 +1,15 @@
 # Changelog
 
-## 2026-07-23 (profiles, first-class CRIU, EESSI-class stack)
+## 2026-07-23 (drop EESSI; linkers/loaders + Cosmo libc + kernel CRIU)
 
-- **Hardware profiles:** drivers/performance; [linux-rg](https://github.com/HaoZeke/linux-rg) and [hzArchiso](https://github.com/HaoZeke/hzArchiso) as profile *discipline* examples; userspace-preferring drivers; agentic `-rt`-like patches speculative ([product/HARDWARE_PROFILES.md](../product/HARDWARE_PROFILES.md)).
-- **CRIU first-class:** on-image platform capability; tested dump→restore; hit-or-miss restores treated as product defect.
-- **Build/deploy:** EESSI-class guarantees (pinned optimized stack, CI = desk) ([product/BUILD_DEPLOY.md](../product/BUILD_DEPLOY.md)).
-- Raised v1/success criteria; updated brief, vision, capabilities, principles, decision, governance, alternative tracks, README.
+- **Removed EESSI** as wrong layer for agent restore reliability.
+- **Right layer:** linkers, loaders, libc identity ([product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)); Cosmopolitan as **libc alternative**.
+- **CRIU:** first-class and **kernel-deep**—integrated with the kernel/profile we ship, not a random package bolt-on.
+- Deleted `product/BUILD_DEPLOY.md`; rewired brief, vision, technical shape, v1, success, capabilities, principles, decision, governance, alternative tracks, README, checkpointing, hardware profiles.
+
+## 2026-07-23 (profiles, first-class CRIU, EESSI-class stack — superseded)
+
+- Hardware profiles + first-class CRIU; EESSI-class stack later replaced by linkers/loaders (see above).
 
 ## 2026-07-23 (team thread — systemd, btrfs, Archy/Enso, hardware)
 

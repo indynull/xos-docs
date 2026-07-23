@@ -13,12 +13,12 @@ UX lineage (Archy / Enso inspiration): [../concepts/UX_LINEAGE.md](../concepts/U
 | Kernel | Linux (v1). **Hardware-specific profiles** and knobs that earn their keep—not a from-scratch kernel; not QEMU-as-target |
 | Filesystem | **btrfs** default for agent homes, workspaces, capability store, CRIU image dirs (subvols + snapshots + send/receive) |
 | Core userspace | Prefer a **small multicall core** (BusyBox / toybox / custom multicall) over a full GNU userspace by default |
-| Portable tools | Cosmopolitan Libc / APE-style **actually portable** binaries where they help (agent helpers, bootstrap tools, cross-host skills)—not required for every process |
+| Libc / portable runtime | **Cosmopolitan** as libc alternative and APE where it pays; glibc remains for heavy desktop pieces until proven otherwise |
 | Limits | Process isolation; network/file limits; **per-agent Unix user + ACLs** |
 | Init / units | **systemd** (or compatible replacement that keeps unit isolation): one unit per agent, sandbox features, restart policy |
 | Agent supervisor | Orchestrates units + policy + channels; may be systemd itself plus thin policy layer, or a dedicated supervisor that *uses* units |
-| Checkpoint / restore | **CRIU first-class** (process) + **btrfs** snapshots (data)—compose ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
-| Software stack | EESSI-class **pinned optimized** tools for Develop/agents/CI ([BUILD_DEPLOY.md](./BUILD_DEPLOY.md)) |
+| Checkpoint / restore | **CRIU first-class**, **kernel-integrated** (process) + **btrfs** snapshots (data) ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Runtime ABI | Linkers, loaders, libc identity—glibc and/or **Cosmopolitan as libc alternative** ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)) |
 | Capability store | Versioned tools; local first; lives on snapshotted subvols |
 | Agents | One or more workers; each **user account** + unit + memory/data paths; reuse existing stacks if they fit |
 | Shell | CLI + plain-language goal entry; modes; action log; editor/terminal surfaces |
@@ -31,10 +31,10 @@ UX lineage (Archy / Enso inspiration): [../concepts/UX_LINEAGE.md](../concepts/U
 The default mental model is **not** “fork a consumer distro and install an agent.” Prefer:
 
 ```text
-Linux kernel (hardware profiles / measured opts)
+Linux kernel (hardware profiles; CRIU-capable / C-R integrated)
   → btrfs (subvols for agents, workspaces, images)
   → small multicall core (BusyBox-class …)
-  → pinned software stack (EESSI-class revision)
+  → runtime ABI: linker/loader policy; glibc and/or Cosmopolitan
   → systemd-class units + supervisor (one unit / user per agent)
   → CRIU first-class (process freeze) + btrfs snapshots (data freeze)
   → shell (CLI + plain language) + Wayland modal surface
@@ -54,16 +54,14 @@ That is closer to **Talos / appliance multicall** thinking (kernel + one coheren
 
 The agent supervisor and shell can sit **beside** the multicall core, or parts of them can be applets of a larger multicall. Product rule: the human still sees one goal path; process layout is an implementation detail.
 
-### Cosmopolitan / APE-style portability
+### Cosmopolitan as libc alternative (+ APE)
 
-[Cosmopolitan Libc](https://github.com/jart/cosmopolitan) / Actually Portable Executable is a **tool and bootstrap** direction, not a second desktop stack:
+[Cosmopolitan Libc](https://github.com/jart/cosmopolitan) is a first-class **libc alternative** to explore—not only a bag of portable helpers:
 
-- Ship agent helpers, fix-up tools, or capability binaries that run on many hosts without a rebuild matrix.  
-- Useful when a skill must run on a coworker’s machine, in CI, or on a recovery environment with the same blob.  
-- Complements multicall core: core stays small on the installed system; portable blobs travel with capabilities.  
-- Does **not** replace Linux+Wayland for the interactive desktop. Does **not** mean “browser-only OS.”
-
-Use Cosmopolitan where portability pays for itself. Do not force the compositor or the whole desktop through APE.
+- Link agent helpers, capabilities, and selected tools against Cosmo; reduce host DSO drift that breaks CRIU restores.  
+- APE blobs for bootstrap, recovery, and cross-host skills.  
+- Complements multicall core and explicit **linker/loader policy** ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)).  
+- Does **not** mean the whole Wayland desktop must be Cosmo-linked on day one. Declare runtime per tree.
 
 ### What we still optimize
 
@@ -86,9 +84,9 @@ QEMU is CI smoke. Product and performance work target **real machines**. Full wr
 | Personalization | Different machines/users → different layers; product shape stays one |
 | Install set | Profile-driven; not one giant generic rootfs |
 
-### Build / deploy stack (EESSI-class guarantees)
+### Linkers, loaders, runtime identity
 
-Agents and CRIU restores need a **pinned, optimized, multi-host** software stack—same spirit as [EESSI](https://www.eessi.io/). Hit-or-miss restores are often library and path drift, not only CRIU. Full write-up: [BUILD_DEPLOY.md](./BUILD_DEPLOY.md).
+Hit-or-miss agent restore is often a **linker/loader/libc** problem (wrong layer: site package stacks). Fix the runtime ABI of agent trees; pair with kernel-deep CRIU. Full write-up: [LINKERS_LOADERS.md](./LINKERS_LOADERS.md).
 
 ## Desktop and shell
 
@@ -127,9 +125,9 @@ Two layers, both in:
 
 Compose: dump process → images on subvol → snapshot subvol. CRIU fail-soft still leaves btrfs truth. Details: [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md).
 
-**Not v1 product goals:** full Wayland DE CRIU, cross-kernel live migration as the pitch. **Yes:** btrfs default durability; **first-class CRIU** on the image with supervisor dump/restore of the canonical agent tree + tested restore path; unit-per-agent.
+**Not v1 product goals:** full Wayland DE CRIU, cross-kernel live migration as the pitch. **Yes:** btrfs default durability; **first-class CRIU** deeply tied to the **kernel we ship** (config, features, and any needed integration—not a random distro package bolted on); supervisor dump/restore of the canonical agent tree + tested restore; dump-friendly link/load policy; unit-per-agent.
 
-CRIU is a **host** package (GPLv2). Checkpoint images and secret-bearing snaps need swap-class care.
+CRIU is GPLv2. Checkpoint images and secret-bearing snaps need swap-class care.
 
 ## Base system rules
 
@@ -145,17 +143,17 @@ CRIU is a **host** package (GPLv2). Checkpoint images and secret-bearing snaps n
 
 | Piece | Example options | Notes |
 |-------|-----------------|--------|
-| Kernel | Linux + machine profile overlays | e.g. linux-rg-style discipline |
+| Kernel | Linux + machine profile overlays; CRIU-capable | C/R integrated with the kernel we ship |
 | Core applets | BusyBox, toybox, custom multicall | Mount, net, basic utils |
 | Init / agent control | systemd units + thin policy supervisor | One unit/user per agent; sandbox flags |
 | Filesystem | btrfs | Agent/workspace/image subvols + snapshots |
-| Checkpoint | CRIU first-class + btrfs snaps | Process + data; tested restore |
-| Software stack | EESSI / EESSI-like / pinned modules | Same on desk and CI |
+| Checkpoint | CRIU first-class + btrfs snaps | Kernel-deep process C/R + data |
+| Runtime ABI | Linker/loader policy; glibc and/or Cosmo | Dump-friendly agent trees |
 | Shell | Real shell + plain-language front | Same agent stack |
 | Desktop | Wayland compositor + modal shell UI | Windows optional |
-| Portable helpers | Cosmopolitan/APE builds | Capabilities, bootstrap, recovery |
-| Heavy tools | Stack layer or image layer | Editor, browser engine, compilers |
+| Cosmopolitan | Libc alternative + APE | Helpers, capabilities, experiments |
+| Heavy tools | Explicit layers | Editor, browser engine, compilers |
 
 ## v1 image
 
-x86_64 first. Prefer install/boot on **one documented real-machine profile**. CI may use QEMU for smoke only. Image should be **explainable**: small core + CRIU + agent stack + **pinned software stack revision** + enough for the v1 real-work paths. More architectures later (not v1 program).
+x86_64 first. Prefer install/boot on **one documented real-machine profile**. CI may use QEMU for smoke only. Image should be **explainable**: small core + **kernel with CRIU path** + agent stack + **documented linker/loader/libc policy** + enough for the v1 real-work paths. More architectures later (not v1 program).

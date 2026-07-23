@@ -16,15 +16,15 @@ Show the idea works on a few **real** tasks. Not a full workplace product. Not t
 | Desktop | Wayland; modal focus (mode + agent); multi-window allowed, not default |
 | Context | Shared project/workspace across views |
 | Agent supervisor | Units + policy: start/stop; action log; at least two agent identities |
-| CRIU | **First-class:** on image; supervisor dump/restore of canonical agent tree; automated restore test on primary real-hardware profile ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
-| Agents | Goal entry; read and act under ACLs; status, stop, log; durable data paths; dump-friendly layout **required** for the happy path |
+| CRIU | **First-class + kernel-deep:** validated with the kernel we ship; supervisor dump/restore of canonical agent tree; automated restore test on primary real-hardware profile ([../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md)) |
+| Agents | Goal entry; read and act under ACLs; status, stop, log; durable data paths; dump-friendly **link/load layout** required for the happy path |
 | Isolation | Per-agent Unix user + unit sandbox + ACLs; no default “run as me” |
 | Durability | btrfs (or honest fallback) for agent/workspace paths; snapshots as default backup story when available |
-| Capabilities | Small real set (below); one create-and-reuse path; CRIU exposed as a platform capability |
-| Develop | Real edit + terminal + agent session against **pinned stack** |
+| Capabilities | Small real set (below); one create-and-reuse path; CRIU as platform capability |
+| Develop | Real edit + terminal + agent session |
 | Security | Written rules match behavior ([SECURITY.md](./SECURITY.md)) |
-| Base | Multicall-leaning core; at least one **hardware profile** documented ([HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md)); not QEMU-as-product |
-| Build / deploy | Stack revision pinned in image + CI (EESSI-class guarantees; [BUILD_DEPLOY.md](./BUILD_DEPLOY.md)) |
+| Base | Multicall-leaning core; at least one **hardware profile** ([HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md)); not QEMU-as-product |
+| Runtime ABI | Documented linker/loader/libc policy for the agent tree; Cosmopolitan as libc alternative in-scope ([LINKERS_LOADERS.md](./LINKERS_LOADERS.md)) |
 
 ### Capability shapes (pick concrete targets later; keep the shape)
 

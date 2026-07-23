@@ -14,7 +14,8 @@ Things we are **not** trying to be. Saying no keeps the project clear.
 | Consumer distro minus packages as the architecture | Prefer building up from a small core (BusyBox-class / similar), not deleting our way to thin |
 | Full multi-arch distro as v1 | Too large for the first proof |
 | New kernel from scratch (v1) | Use Linux; own the desktop/agent layer; optimize what we ship |
-| Cosmopolitan as the whole desktop | APE/portable blobs for tools and capabilities—not a second interactive stack |
+| Cosmopolitan as the whole desktop day one | Cosmo as **libc alternative** for agent/capability trees is in-scope; full DE Cosmo-linked is not required |
+| Multi-site package/module stacks as the restore fix | Wrong layer; fix linkers/loaders/libc and kernel-deep CRIU instead |
 | Browser as the main product | Engine is fine; browse-first is not |
 | Apps as the only way to work | Goals and capabilities come first |
 | Endless UI customization | Defaults should be strong; modal focus over window soup |

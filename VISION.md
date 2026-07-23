@@ -22,11 +22,11 @@ goal  →  skill (capability)  →  result
 | **Shell** | Normal CLI plus plain-language goals into the agent stack; not a separate product bolted on later |
 | **Agent** | Built into the OS: look things up, take actions, and help create new capabilities when missing. Not one privileged chat process |
 | **Agent supervisor** | systemd-class units + policy: start/stop agents, isolation, restarts, inter-agent channels. Not ad-hoc background jobs |
-| **Checkpointing** | **CRIU first-class** (live process) + **btrfs** snapshots (data)—compose; tested restores, not hit-or-miss |
+| **Checkpointing** | **CRIU first-class + kernel-deep** (live process) + **btrfs** snapshots (data)—tested restores, not hit-or-miss |
 | **Agent identity** | Each agent: Unix user + unit + ACLs + durable data paths. Rights are granted, not inherited wholesale from the human |
 | **Desktop surface** | Wayland + modal UI: work mode and agent interaction at the center; many windows possible, not the default. Lineage: Archy/Enso-style command focus ([concepts/UX_LINEAGE.md](./concepts/UX_LINEAGE.md)) |
-| **Base system** | Linux + **btrfs** + **small multicall core**, optional Cosmopolitan/APE tools, **hardware profiles**, real optimizations. Not “Ubuntu minus packages.” |
-| **Software stack** | EESSI-class **pinned optimized** tools—same revision on desk, CI, and agents ([product/BUILD_DEPLOY.md](./product/BUILD_DEPLOY.md)) |
+| **Base system** | Linux + **btrfs** + **small multicall core**, **hardware profiles**, real optimizations. Not “Ubuntu minus packages.” |
+| **Runtime ABI** | Linkers, loaders, libc identity—glibc and/or **[Cosmopolitan](https://github.com/jart/cosmopolitan) as libc alternative** ([product/LINKERS_LOADERS.md](./product/LINKERS_LOADERS.md)) |
 | **Fallback** | Full browser or normal app when the short path does not fit |
 
 **Reuse:** the first time you connect a painful system costs effort and review. Later times should be a short goal, not the same UI maze.
@@ -54,8 +54,7 @@ For people whose work spans many tools and systems—not for theme hobbyists.
 | Huge default install | Multicall core + explicit layers; **fast**, understandable system |
 | Agent as magic chat with your rights | Unit + user + ACLs; log and stop; CRIU + btrfs when useful |
 | “Boots in QEMU” as the story | Real hardware profiles; measure the base |
-| Hit-or-miss agent restore | First-class CRIU + pinned stack + dump-friendly agents |
-| Random tools per machine | Shared stack revision (EESSI-class) |
+| Hit-or-miss agent restore | Kernel-deep CRIU + stable linker/loader/libc for agent trees |
 | Pretty distro as the story | Getting real work done |
 
 ---
@@ -82,9 +81,9 @@ Full list: [principles/NON_GOALS.md](./principles/NON_GOALS.md).
 10. Work mode always shown  
 11. Agents are supervised and isolated (own user + unit + ACLs + data paths)  
 12. Shell is native (CLI + plain language), not an afterthought  
-13. Durable agent state on disk (btrfs); **first-class CRIU** with tested restores  
+13. Durable agent state on disk (btrfs); **first-class, kernel-deep CRIU** with tested restores  
 14. Hardware-aware base; QEMU is not the product  
-15. Pinned software stack (EESSI-class); same revision on desk and CI  
+15. Explicit linker/loader/libc policy (Cosmopolitan as libc alternative is in-scope)  
 
 → [principles/PRINCIPLES.md](./principles/PRINCIPLES.md)
 
@@ -100,8 +99,8 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 - real investigation or write-up with sources  
 - create one non-trivial capability and use it again  
 - at least two agents under the supervisor with distinct users/ACLs  
-- CRIU dump → restore of the canonical agent path on a real-hardware profile  
-- image and CI share a pinned software stack revision  
+- CRIU dump → restore of the canonical agent path on a real-hardware profile (our kernel)  
+- documented linker/loader/libc policy for that agent tree  
 
 **Fail if:** pretty ISO + chat on a normal desktop, only gimmick demos, “it boots in QEMU” with no real-work path, or agent restore is untested roulette.
 
@@ -111,6 +110,6 @@ Bootable image aimed at **real hardware** (CI may use QEMU; that is not the goal
 
 ## Team decision
 
-One product: goal-first desktop (Archy/Enso-informed), capabilities, supervised agents (user + unit + ACLs + btrfs data), **first-class CRIU**, Wayland modal shell, hardware profiles, EESSI-class pinned stack. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos as the product) stay separate.
+One product: goal-first desktop (Archy/Enso-informed), capabilities, supervised agents (user + unit + ACLs + btrfs data), **kernel-deep first-class CRIU**, Wayland modal shell, hardware profiles, Cosmopolitan-as-libc and linker/loader policy. Prove it before calling it an OS. Other ideas (stores, mobile-as-product, pure distro polish, QEMU demos as the product) stay separate.
 
 → [product/DECISION.md](./product/DECISION.md)

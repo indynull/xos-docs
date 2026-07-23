@@ -24,11 +24,11 @@ Some capabilities are **built into the OS**, not only user-wired:
 
 | Platform capability | Role |
 |---------------------|------|
-| **CRIU checkpoint/restore** | First-class; supervisor-mediated freeze/resume of agent trees ([CHECKPOINTING.md](./CHECKPOINTING.md)) |
+| **CRIU checkpoint/restore** | First-class, kernel-deep; supervisor-mediated freeze/resume ([CHECKPOINTING.md](./CHECKPOINTING.md)) |
 | **btrfs snapshot / send** | Durable agent/workspace points |
-| **Pinned software stack** | Develop and agent tools from a revisioned stack ([../product/BUILD_DEPLOY.md](../product/BUILD_DEPLOY.md)) |
+| **Declared runtime ABI** | Linker/loader/libc (glibc and/or Cosmopolitan) for binaries a capability runs ([../product/LINKERS_LOADERS.md](../product/LINKERS_LOADERS.md)) |
 
-User-built capabilities should **declare** stack and permission needs so restore and reuse stay reliable.
+User-built capabilities should **declare** permissions and runtime needs so restore and reuse stay reliable.
 
 ## How work should feel
 
