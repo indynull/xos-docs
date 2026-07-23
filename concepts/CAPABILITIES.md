@@ -4,7 +4,7 @@ Parent: [../VISION.md](../VISION.md) · See: [AGENTS.md](./AGENTS.md) · [../pro
 
 ## What one is
 
-A **capability** is a saved way to use a system: internal service, vendor tool, repo, file format, API, website. Tool shape can follow MCP or anything similar.
+A **capability** is a saved way to use a system: internal service, vendor tool, repo, file format, API, website. Tool wire-up may follow open agent-tool protocols such as the **Model Context Protocol (MCP)** ([spec](https://modelcontextprotocol.io/specification/2025-11-25))—a *protocol choice*, not an xOS invention.
 
 ```text
 goal → do we have a capability?
@@ -12,19 +12,34 @@ goal → do we have a capability?
          no  → build one with the user → check permissions → save → reuse later
 ```
 
-**Good ones are:** predictable, limited in power, inspectable, versioned, turn-off-able, explained in plain words.
+**Teach path (preferred when freeform agents are slow or creative):** the human does the job the **normal/instant** way until the pattern is clear, then that pattern is **persisted** as a capability under sandbox limits—so the next goal hits a fixed path, not an improvising model.
+
+**Good ones are:** predictable, limited in power, inspectable, versioned, turn-off-able, explained in plain words, sandboxed so they do not “get creative.”
 
 ## What we care about
 
 Connecting **real work systems** under clear permissions. Tiny demos can show the pattern; they are not the goal list.
+
+## Platform capabilities (OS-provided)
+
+Some capabilities are **built into the OS**, not only user-wired:
+
+| Platform capability | Role |
+|---------------------|------|
+| **btrfs snapshot / send** (preferred) | Durable agent/workspace points |
+| **Process checkpoint** (direction) | Freeze/resume agent trees when committed—CRIU is a candidate ([CHECKPOINTING.md](./CHECKPOINTING.md)) |
+
+User-built capabilities should **declare** permissions and runtime needs so restore and reuse stay reliable.
 
 ## How work should feel
 
 | Kind of work | Preferred path |
 |--------------|----------------|
 | Multi-step job | Mode + shared project context + several capabilities |
-| Same painful tool every week | Wire once, then call by goal |
+| Same painful tool every week | Wire once (or teach path), then call by goal |
+| Need it *now* (no model lag) | Instant normal tools (terminal, launcher, editor)—always available |
 | Open-ended browsing | Normal browser is fine |
+| Enterprise auth / mail / flaky SaaS | Capability with explicit auth story—not freeform agent hope |
 
 **Check:** less hunting? something saved for next time? right mode? would this still make sense on a hard multi-day job?
 
