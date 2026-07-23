@@ -2,6 +2,9 @@
 
 Parent: [../VISION.md](../VISION.md) · See: [WEDGE.md](./WEDGE.md) · [../concepts/AGENTS.md](../concepts/AGENTS.md)
 
+> **Exploration / candidate notes — not committed product law.**  
+> Direction: better than shell-out-only; dual remote/local and budgets are desirable. v1 may be remote-first.
+
 ## Problem
 
 Shelling out to a chat CLI is **not enough for an OS**. Latency, cost, offline, and policy need a **system-level** path.

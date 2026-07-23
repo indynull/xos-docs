@@ -1,6 +1,9 @@
-# UX lineage (inspiration)
+# UX lineage (optional inspiration)
 
 Parent: [../VISION.md](../VISION.md) · See: [WORK_MODES.md](./WORK_MODES.md) · [CAPABILITIES.md](./CAPABILITIES.md)
+
+> **Optional — not required reading, not product identity.**  
+> Parked inspiration only. Skip unless curious.
 
 Not clones. Prior art that still points at the product.
 

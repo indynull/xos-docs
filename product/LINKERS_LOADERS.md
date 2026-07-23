@@ -2,6 +2,9 @@
 
 Parent: [../VISION.md](../VISION.md) · See: [TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md) · [../concepts/CHECKPOINTING.md](../concepts/CHECKPOINTING.md) · [HARDWARE_PROFILES.md](./HARDWARE_PROFILES.md)
 
+> **Exploration / candidate notes — not committed product law.**  
+> Spine docs stay near “real system libc by default.” Detail here is for implementers later.
+
 ## Right layer for agent restore
 
 Hit-or-miss **agent restore** is not fixed by a shared site package narrative. CRIU freezes a process defined by:

@@ -2,13 +2,16 @@
 
 Parent: [../VISION.md](../VISION.md) · See: [AGENTS.md](./AGENTS.md) · [../product/TECHNICAL_SHAPE.md](../product/TECHNICAL_SHAPE.md) · [../product/SECURITY.md](../product/SECURITY.md)
 
-**Name note:** often typed “ciru”; the project is **[CRIU](https://criu.org/)** — Checkpoint/Restore In Userspace (pronounced *kree-oo*). GPLv2 utility; freeze a process tree, write images to disk, restore later. Mostly userspace + kernel features (`ptrace`, namespaces, TCP repair, lazy pages, etc.). Ecosystem includes [go-criu](https://github.com/checkpoint-restore/go-criu), Podman/Docker/K8s hooks, experimental GPU paths (`cuda-checkpoint` / CRIUgpu).
+> **Exploration / candidate stack — not committed product law.**  
+> **Product intent:** durable agent data + ability to freeze/resume agent process state when we ship it.  
+> **btrfs** (or equal) for homes/workspaces/snapshots is preferred product direction.  
+> **CRIU** is the leading *candidate* for process checkpoint/restore. When we commit to shipping CRIU, **kernel-deep + tested restore** is the right bar—that timing is **not** a v1 pass/fail gate.
 
-## First-class OS capability (not a bolt-on)
+**Name note:** often typed “ciru”; the project is **[CRIU](https://criu.org/)** — Checkpoint/Restore In Userspace (pronounced *kree-oo*).
 
-CRIU is a **baked-in platform capability**: shipped on the image, wired into the supervisor, documented as a skill agents and humans can rely on—not “maybe install criu later.”
+## Direction: process freeze as a platform skill (when committed)
 
-Agent restore in the wild is often **hit-or-miss** (unsupported fds, library drift, GPU, hand-wavy dumps). xOS treats that as a product defect to close, not an expected UX:
+Agent restore in the wild is often **hit-or-miss**. If/when CRIU is in-tree, treat unreliability as a defect:
 
 | Guarantee | Direction |
 |-----------|-----------|

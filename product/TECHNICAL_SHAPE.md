@@ -2,9 +2,12 @@
 
 Parent: [../VISION.md](../VISION.md)
 
-Guesses only. Swap parts if the idea still holds. The spine below is intentional: **Wayland + modal shell**, **agent supervisor (systemd-class units)**, **per-agent Unix identity + ACLs**, **btrfs + CRIU durability**, **radical small base**, **real-hardware kernel profiles**. Not “stock desktop + chat,” not “Ubuntu minus packages,” and not “QEMU demo distro.”
+> **Exploration / candidate stack — not committed product law.**  
+> Product law lives in BRIEF, VISION, principles, v1 scope, and success criteria. This file is a possible implementation shape. Swap parts if the product idea still holds.
 
-UX lineage (Archy / Enso inspiration): [../concepts/UX_LINEAGE.md](../concepts/UX_LINEAGE.md).
+Guesses: agent supervisor (systemd-class units), per-agent Unix identity + ACLs, btrfs durability, multicall-leaning base, optional CRIU when we commit to process checkpointing. Not “stock desktop + chat,” not “Ubuntu minus packages.”
+
+Optional UX history (not required identity): [../concepts/UX_LINEAGE.md](../concepts/UX_LINEAGE.md).
 
 ## Layers
 

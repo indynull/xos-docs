@@ -2,6 +2,9 @@
 
 Parent: [../VISION.md](../VISION.md) · See: [TECHNICAL_SHAPE.md](./TECHNICAL_SHAPE.md) · [LINKERS_LOADERS.md](./LINKERS_LOADERS.md)
 
+> **Exploration / candidate notes — not committed product law.**  
+> QEMU-first bring-up is fine for the harness. Profile machinery is direction, not a v1 spine gate.
+
 ## Problem
 
 Team default for early work: **QEMU first** for bring-up and harness iteration—**and do not ignore real hardware**.

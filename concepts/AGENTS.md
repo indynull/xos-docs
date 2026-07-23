@@ -11,7 +11,7 @@ Agents are part of the OS. They turn goals into capability calls, and help creat
 A **supervisor** (policy layer on top of **systemd-class units**, or units alone if enough) owns agent processes:
 
 - start / stop / restart / idle cleanup via **per-agent units**  
-- **checkpoint / restore**: [CRIU](./CHECKPOINTING.md) for process trees + **btrfs** for durable data  
+- **durable data**: on disk (**btrfs** preferred); process freeze/resume when we commit a stack (e.g. CRIU—[CHECKPOINTING.md](./CHECKPOINTING.md) is exploration)  
 - which agents may talk to which (controlled channels)  
 - policy hooks (confirm, log, kill, dump, snapshot)  
 - mapping each agent to a **Unix user + ACLs + home/memory paths**

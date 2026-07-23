@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-23 (design review: demote tech locks from product law)
+
+- Response to PR design review (changes requested): keep product spine; demote implementation bets.
+- **Law stays:** OS harness, dual path, teach→capability, supervised multi-agent identity, durable agent data/btrfs preferred, multicall-leaning base, wedge, not just DE.
+- **Demoted from BRIEF/VISION/principles/v1 pass-fail:** CRIU dump→restore gate, hardware profile machinery, linker/loader/libc as law, Wayland/modal as locked, Archy/Enso as identity.
+- Tech files (`CHECKPOINTING`, `LINKERS_LOADERS`, `HARDWARE_PROFILES`, `MODEL_STACK`, heavy `TECHNICAL_SHAPE`) labeled **exploration / candidate**.
+- `UX_LINEAGE` optional, off main read path.
+
 ## 2026-07-23 (wedge, dual model, QEMU-first bring-up)
 
 - **Wedge:** OS-level agent harness is the “can’t do without us” product ([product/WEDGE.md](../product/WEDGE.md)); defer boiling every layer.

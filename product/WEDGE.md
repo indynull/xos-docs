@@ -15,22 +15,22 @@ If we improve every layer (compositor, browser, libc, network, local LLM, mail, 
 | **Supervised agents** | Per-agent user + unit + ACLs; not one chat process as you |
 | **Capabilities as OS objects** | Teach → sandbox → reuse; versioned, stoppable, logged |
 | **Dual path** | Instant normal tools **and** goal path in one session/mode |
-| **CRIU first-class** | Freeze/restore agent trees with the kernel we ship |
-| **Durable agent data** | btrfs (or equal) homes/memories, not only chat history |
+| **Durable agent data** | Homes/memories on disk (btrfs preferred), not only chat history |
 | **Work modes** | Desktop state follows the task, not the focused window |
+| **Checkpoint intent** | Freeze/resume agent process state when we ship it (CRIU is a candidate, not the wedge name) |
 
 That is the **“can’t be done without our thing”** center. Everything else either **supports** the harness or is **later**.
 
 ```text
 wedge (must be uniquely good)
-  agent harness + capabilities + dual path + CRIU/identity/modes
+  agent harness + capabilities + dual path + identity/modes + durable state
 
 supports the wedge
-  lean base, system libc, Wayland modal surface, hardware profiles
+  lean base, quiet goal-first surface, real system libc by default
 
-later / optional
-  custom network stack, full browser product, alternate libc,
-  residential-IP agent browsing fleet, speech-first UI, …
+later / optional / candidate
+  CRIU ship timing, custom network stack, full browser product,
+  alternate libc, residential-IP browsing fleet, speech-first UI, …
 ```
 
 ## What a “better hermes / MCP / opencode” is
@@ -53,9 +53,10 @@ Do not rebuild every coding-agent feature. Own the **OS integration surface**.
 |---------------------|----------------------------------|
 | Goal → capability → mode loop that feels native | Replacing NetworkManager/iwd |
 | Supervisor + two agent identities + dual path | Full agent browser farm (puppeteer + residential IP) |
-| CRIU dump/restore of canonical agent tree | Novel system libc |
+| Teach → sandboxed capability | Novel system libc |
 | One real Develop path + one investigation path | Perfect offline local-LLM desktop for $180 laptops |
-| Documented model routing (even if simple) | Owning every website |
+| Durable agent data on disk | Owning every website |
+| | CRIU dump→restore as a merge/demo gate (direction only until committed) |
 
 If a proposal does not make the **harness** stronger, cheaper, or more trustworthy, it waits.
 
